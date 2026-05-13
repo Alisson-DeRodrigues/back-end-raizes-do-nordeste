@@ -1,0 +1,8 @@
+import { Request, Response } from "express";
+import { getAllUnitsService } from "../services/units-service/units-service";
+
+export const getUnits = async (req: Request, res: Response) => {
+    let httpResponse = await getAllUnitsService();
+
+    return res.status(httpResponse.status).json(httpResponse.body);
+}
