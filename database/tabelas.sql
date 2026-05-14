@@ -32,7 +32,7 @@ CREATE TABLE produtos_cardapio (
     unidade_id UUID NOT NULL REFERENCES unidades(id),
 
     nome VARCHAR(255) NOT NULL,
-    descricao TEXT, --- talvez remover
+    descricao TEXT, --- opcional
     ativo BOOLEAN DEFAULT TRUE,
     preco NUMERIC(10,2) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
