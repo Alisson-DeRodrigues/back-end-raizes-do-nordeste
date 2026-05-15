@@ -54,6 +54,7 @@ CREATE TABLE pedidos (
 
     total NUMERIC(10,2) NOT NULL,
     canal_pedido VARCHAR(30) NOT NULL, -- app, totem, balcão, web
+    forma_pagamento VARCHAR(30) NOT NULL, -- dinheiro, cartão, pix, mock
     status VARCHAR(30) NOT NULL, -- cozinha, pronto, entregue/cancelado
     created_at TIMESTAMP DEFAULT NOW()
 );

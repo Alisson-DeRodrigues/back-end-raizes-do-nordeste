@@ -118,3 +118,35 @@ VALUES
   
   -- Tempero: 5g de Pimenta Malagueta (unidade: g -> 5.00)
   (gen_random_uuid(), 'cccccccc-0000-0000-0000-000000000002', 'eeeeeeee-0000-0000-0000-000000000027', 5.00);
+
+-- pedidos
+-- 1. Criar o cabeçalho do pedido (Prefixo 'f' de Fatura/Pedido)
+INSERT INTO pedidos (id, unidade_id, total, canal_pedido, forma_pagamento, status)
+VALUES (
+    'f0000000-0000-0000-0000-000000000001', 
+    '22222222-2222-2222-2222-222222222222', 
+    64.40, 
+    'balcão', 
+    'pix', 
+    'cozinha'
+) ON CONFLICT (id) DO NOTHING;
+
+-- 2. Adicionar os itens ao pedido (Prefixo 'ba' de 'Base Itens')
+INSERT INTO pedido_itens (id, pedido_id, produto_cardapio_id, quantidade, preco_unidade, subtotal)
+VALUES 
+  (
+    'ba111111-0000-0000-0000-000000000001', 
+    'f0000000-0000-0000-0000-000000000001', 
+    'cccccccc-0000-0000-0000-000000000001', -- ID do Baião de Dois
+    1, 
+    45.90, 
+    45.90
+  ),
+  (
+    'ba111111-0000-0000-0000-000000000002', 
+    'f0000000-0000-0000-0000-000000000001', 
+    'cccccccc-0000-0000-0000-000000000002', -- ID do Acarajé
+    1, 
+    18.50, 
+    18.50
+  ) ON CONFLICT (id) DO NOTHING;
