@@ -16,12 +16,18 @@ router.post("/login", UserController.postLogin);
 
 router.get("/unidades", UnitControler.getUnits);
 
-router.get("/estoque/:id", InventoryController.getInventoryItems);
+router.get("/estoques/:id", InventoryController.getInventoryItems);
 
 router.get("/cardapio/:id", MenuController.getMenu);
 
 router.get("/pedidos/:id", OrderController.getOrders);
 router.get("/pedidos/items/:id", OrderController.getOrderItems);
+
+router.get("/pagamentos", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
+
+// log e auditoria
+router.get("/pagamentos-historico/:id", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
+router.get("/estoques-historico/:id", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
 
 
 router.get("/financeiro", authMiddleware, roleMiddleware(["admin", "manager"]), FinanceController.getFinance);

@@ -76,7 +76,6 @@ CREATE TABLE movimentacao_estoques (
 
     tipo VARCHAR(30) NOT NULL, -- entrada, saída, perda, ajuste
     quantidade NUMERIC(10,2) NOT NULL,
-    referencia_id UUID,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -90,6 +89,17 @@ CREATE TABLE usuarios (
     senha TEXT NOT NULL,
     ativo_programa_fidelidade BOOLEAN DEFAULT FALSE,
     pontos NUMERIC(5,1),
-    perfil VARCHAR(30) NOT NULL, -- cliente, funcionário
-    role TEXT NOT NULL -- admin, manager, cashier
+    role TEXT NOT NULL -- admin, cozinha, atendente, cliente
+);
+
+-- esquema para pagamentos
+CREATE TABLE pagamentos_pedidos (
+    id UUID PRIMARY KEY,
+    unidade_id UUID REFERENCES unidades(id),
+    pedido_id UUID NOT NULL REFERENCES pedidos(id),
+
+    metodo_pagamento VARCHAR(30) NOT NULL, -- dinheiro, cartão, pix, mock
+    valor NUMERIC(10,2) NOT NULL,
+    status VARCHAR(30) NOT NULL, -- pending, paid, refused
+    created_at TIMESTAMP DEFAULT NOW()
 );

@@ -150,3 +150,63 @@ VALUES
     18.50, 
     18.50
   ) ON CONFLICT (id) DO NOTHING;
+
+-- pagamento pedido
+INSERT INTO pagamentos_pedidos (id, unidade_id, pedido_id, metodo_pagamento, valor, status)
+VALUES (
+    'daaaaaaa-0000-0000-0000-000000000001', 
+    '22222222-2222-2222-2222-222222222222', 
+    'f0000000-0000-0000-0000-000000000001', -- ID do Pedido que criamos
+    'mock', 
+    64.40, 
+    'pendente'
+) ON CONFLICT (id) DO NOTHING;
+
+-- criando usuários
+-- Popula a tabela de usuários
+INSERT INTO usuarios (id, unidade_id, nome, email, senha, role, ativo_programa_fidelidade, pontos)
+VALUES 
+  (
+    'ba000000-0000-0000-0000-000000000001', 
+    '22222222-2222-2222-2222-222222222222', 
+    'João Carlos', 
+    'admin@restaurante.com', 
+    '$2y$10$z1Atic9DQCMM4E3SMdw7C.VYi7hfdzxyXZnULi3YhBngvDDG5Sj9a', 
+    'admin', 
+    FALSE, 
+    0
+  ),
+  (
+    'ba000000-0000-0000-0000-000000000002', 
+    '22222222-2222-2222-2222-222222222222', 
+    'Roberto', 
+    'cozinha@restaurante.com', 
+    '$2y$10$z1Atic9DQCMM4E3SMdw7C.VYi7hfdzxyXZnULi3YhBngvDDG5Sj9a', 
+    'cozinha', 
+    FALSE, 
+    0
+  ),
+  (
+    'ba000000-0000-0000-0000-000000000003', 
+    '22222222-2222-2222-2222-222222222222', 
+    'Maria', 
+    'atendimento@restaurante.com', 
+    '$2y$10$z1Atic9DQCMM4E3SMdw7C.VYi7hfdzxyXZnULi3YhBngvDDG5Sj9a', 
+    'atendente', 
+    FALSE, 
+    0
+  ),
+  (
+    'ba000000-0000-0000-0000-000000000004', 
+    '22222222-2222-2222-2222-222222222222', 
+    'Lucas', 
+    'cliente@email.com', 
+    '$2y$10$z1Atic9DQCMM4E3SMdw7C.VYi7hfdzxyXZnULi3YhBngvDDG5Sj9a', 
+    'cliente', 
+    TRUE, 
+    150.5
+  )
+ON CONFLICT (email) DO UPDATE SET 
+  senha = EXCLUDED.senha,
+  role = EXCLUDED.role,
+  pontos = EXCLUDED.pontos;

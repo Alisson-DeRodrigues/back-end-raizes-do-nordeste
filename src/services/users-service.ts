@@ -16,8 +16,8 @@ export const userLoginService = async (email: string, password: string) => {
         }
     
         const user = result.rows[0];
-    
-        const valid = await comparePassword(password, user.password);
+
+        const valid = await comparePassword(password, user.senha);
     
         if (!valid) {
             response = {

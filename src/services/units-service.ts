@@ -1,4 +1,4 @@
-import { findAllUnits } from "../../repositories/units-repository";
+import { findAllUnits } from "../repositories/units-repository";
 
 export const getAllUnitsService = async () => {
     try {
