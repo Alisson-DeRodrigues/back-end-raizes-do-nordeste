@@ -1,4 +1,5 @@
 import * as UserRepository from "../repositories/users-repository";
+import { createErrorMessage } from "../utils/error-message";
 import { comparePassword, generateToken, hashPassword } from "./auth-service";
 
 
@@ -8,11 +9,15 @@ export const userLoginService = async (email: string, password: string) => {
         const result = await UserRepository.findUserByEmail(email);
     
         if (result.rows.length === 0) {
-            response = {
+            return {
                 status: 401,
-                body: { error: "Usuário não encontrado" }
+                body: createErrorMessage(
+                    "LOGIN_UNAUTHORIZED",
+                    "Usuário ou senha inválidos",
+                    "/login",
+                )
             }
-            return response;
+
         }
     
         const user = result.rows[0];
