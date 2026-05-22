@@ -72,9 +72,10 @@ CREATE TABLE pedido_itens (
 -- esquema para movimentação de estoque (histórico de entradas e saídas)
 CREATE TABLE movimentacao_estoques (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    unidade_id UUID NOT NULL REFERENCES unidades(id),
     estoque_item_id UUID NOT NULL REFERENCES estoque_itens(id),
 
-    tipo VARCHAR(30) NOT NULL, -- entrada, saída, perda, ajuste
+    tipo VARCHAR(30) NOT NULL, -- entrada, saida, perda, ajuste
     quantidade NUMERIC(10,2) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );

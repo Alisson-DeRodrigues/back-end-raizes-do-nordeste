@@ -16,3 +16,11 @@ export const insertPaymentPaid = async (payment: Payment) => {
         [payment.id ?? null, payment.unidadeId, payment.pedidoId, payment.metodoPagamento, payment.valor, "pago"]
     );
 }
+
+export const createOrderPayment = async (unidade_id: string, pedido_id: string, forma_pagamento: string, valor: number, status: string) => {
+    const result = await pool.query(
+        "INSERT INTO pagamentos_pedidos (unidade_id, pedido_id, metodo_pagamento, valor, status) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
+        [unidade_id, pedido_id, forma_pagamento, valor, status]
+    );
+    return result;
+};

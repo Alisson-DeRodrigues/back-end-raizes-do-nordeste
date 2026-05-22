@@ -5,3 +5,7 @@ export const findAllUnits = async () => {
 
   return result;
 }
+
+export const findUnitById = async (unidade_id: string) => {
+    return pool.query("SELECT * FROM unidades WHERE id = $1;", [unidade_id]);
+}

@@ -6,7 +6,7 @@ import * as UserController from "./controllers/users-controller";
 import * as FinanceController from "./controllers/finance-controller";
 import * as UnitControler from "./controllers/units-controller";
 import * as MenuController from "./controllers/menus-controller";
-import * as OrderController from "./controllers/orders-controlller";
+import * as OrderController from "./controllers/orders-controller";
 import * as InventoryController from "./controllers/inventories-controller";
 import * as PaymentController from "./controllers/payments-mock-controller";
 
@@ -24,6 +24,9 @@ router.get("/cardapio/:id", authMiddleware, roleMiddleware(["*"]), MenuControlle
 
 router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrders);
 router.get("/pedidos/items/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrderItems);
+router.post("/pedidos", authMiddleware, roleMiddleware(["admin", "atendente", "cliente"]), OrderController.createOrder);
+router.post("/pedido", OrderController.createOrder);
+
 
 router.get("/pagamentos/:id", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentController.processPaymentMock);
 
