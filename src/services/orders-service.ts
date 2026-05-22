@@ -53,3 +53,30 @@ export const getAllOrderItemsByOrderIdService = async (orderId: string) => {
         };
     }
 }
+
+export const getOrderByIdService = async (orderId: string) => {
+    try {
+        let response = null;
+        const result = await OrderRepository.findOrderById(orderId);
+        if (result.rows.length === 0) {
+            response = {
+                status: 404,
+                body: { error: "Pedido não encontrado" }
+            }
+            return response;
+        }
+
+        const order = result.rows[0];
+
+        return {
+            status: 200,
+            body: order
+        };
+    } catch (error) {
+        console.error("Erro ao buscar pedido:", error);
+        return {
+            status: 500,
+            body: { error: "Erro interno do servidor" }
+        };
+    }
+} 

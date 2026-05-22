@@ -12,3 +12,8 @@ export const findOrderItemsByOrderId = async (orderId: string) => {
     const result = await pool.query("SELECT * FROM pedido_itens WHERE pedido_id = $1;", [orderId]);
     return result;
 }
+
+export const findOrderById = async (orderId: string) => {
+    const result = await pool.query("SELECT * FROM pedidos WHERE id = $1;", [orderId]);
+    return result;
+}

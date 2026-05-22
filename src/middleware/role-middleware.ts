@@ -16,7 +16,7 @@ export function roleMiddleware(allowedRoles: string[]) {
       });
     }
 
-    if (!allowedRoles.includes(userRole)) {
+    if (!allowedRoles.includes(userRole) && !allowedRoles.includes("*")) {
       return res.status(403).json({
         error: "Sem permissão"
       });

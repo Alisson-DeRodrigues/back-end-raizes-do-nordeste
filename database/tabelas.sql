@@ -94,12 +94,12 @@ CREATE TABLE usuarios (
 
 -- esquema para pagamentos
 CREATE TABLE pagamentos_pedidos (
-    id UUID PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     unidade_id UUID REFERENCES unidades(id),
     pedido_id UUID NOT NULL REFERENCES pedidos(id),
 
     metodo_pagamento VARCHAR(30) NOT NULL, -- dinheiro, cartão, pix, mock
     valor NUMERIC(10,2) NOT NULL,
-    status VARCHAR(30) NOT NULL, -- pending, paid, refused
+    status VARCHAR(30) NOT NULL, -- pendente, pago, recusado
     created_at TIMESTAMP DEFAULT NOW()
 );

@@ -1,5 +1,5 @@
 import * as UserRepository from "../repositories/users-repository";
-import { comparePassword, generateToken } from "./auth-service";
+import { comparePassword, generateToken, hashPassword } from "./auth-service";
 
 
 export const userLoginService = async (email: string, password: string) => {
@@ -44,4 +44,45 @@ export const userLoginService = async (email: string, password: string) => {
             body: { error: "Erro no servidor" }
         }
       }
+}
+
+export const registerClientService = async (unidade_id: number, name: string, email: string, password: string, ativo_programa_fidelidade: boolean) => {
+    try {
+        let response = null;
+        const existingUser = await UserRepository.findUserByEmail(email);
+    
+        if (existingUser.rows.length > 0) {
+            response = {
+                status: 400,
+                body: { error: "Email já cadastrado" }
+            }
+            return response;
+        }
+    
+        const hashedPassword = await hashPassword(password);
+
+        const role = "cliente";
+
+        const result = await UserRepository.createClient(unidade_id, name, email, hashedPassword, role, ativo_programa_fidelidade);
+    
+        if (result.rowCount === 0) {
+            response = {
+                status: 500,
+                body: { error: "Erro ao criar usuário" }
+            }
+            return response;
+        }
+    
+        return {
+            status: 201,
+            body: { message: "Cliente registrado com sucesso" }
+        };
+    
+      } catch (err) {
+        console.error(err);
+        return {
+            status: 500,
+            body: { error: "Erro no servidor" }
+        }
+  }
 }

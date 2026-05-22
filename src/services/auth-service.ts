@@ -7,6 +7,11 @@ export async function comparePassword(password: string, hash: string) {
   return bcrypt.compare(password, hash);
 }
 
+export async function hashPassword(password: string) {
+  const saltRounds = 10;
+  return bcrypt.hash(password, saltRounds);
+}
+
 export function generateToken(userId: number, role: string) {
   return jwt.sign(
     { id: userId, role },

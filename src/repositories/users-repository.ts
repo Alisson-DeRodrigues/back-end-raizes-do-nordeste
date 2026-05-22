@@ -8,3 +8,10 @@ export const findUserByEmail = async (email: string) => {
 
   return result;
 }
+
+export const createClient = async (unidade_id: number, name: string, email: string, hashedPassword: any, role: string, ativo_programa_fidelidade: boolean) => {
+    return await pool.query(
+        "INSERT INTO usuarios (unidade_id, nome, email, senha, role, ativo_programa_fidelidade) VALUES ($1, $2, $3, $4, $5, $6)",
+        [unidade_id, name, email, hashedPassword, role, ativo_programa_fidelidade]
+    );
+}
