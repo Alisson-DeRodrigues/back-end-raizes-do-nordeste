@@ -3,17 +3,20 @@ import * as InventoryRepository from "../repositories/inventories-repository";
 import * as UnitRepository from "../repositories/units-repository";
 import * as MenuRepository from "../repositories/menus-repository";
 import * as PaymentRepository from "../repositories/payments-repository";
+import { createErrorMessage } from "../utils/error-message";
 
 export const getAllOrdersByUnitIdService = async (unidade_id: string) => {
     try {
-        let response = null;
         const result = await OrderRepository.findOrdersByUnitId(unidade_id);
         if (result.rows.length === 0) {
-            response = {
+            return {
                 status: 404,
-                body: { error: "Nenhum pedido encontrado para a unidade" }
+                body: createErrorMessage(
+                    "ORDER_NOT_FOUND",
+                    "Nenhum pedido encontrado para a unidade",
+                    "/pedidos/:id",
+                )
             }
-            return response;
         }
 
         const orders = result.rows;
@@ -21,26 +24,31 @@ export const getAllOrdersByUnitIdService = async (unidade_id: string) => {
         return {
             status: 200,
             body: orders
-        };
+        }
     } catch (error) {
-        console.error("Erro ao buscar pedidos:", error);
         return {
             status: 500,
-            body: { error: "Erro interno do servidor" }
-        };
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/pedidos/:id",
+            )
+        }
     }
 }
 
 export const getAllOrderItemsByOrderIdService = async (order_id: string) => {
     try {
-        let response = null;
         const result = await OrderRepository.findOrderItemsByOrderId(order_id);
         if (result.rows.length === 0) {
-            response = {
+            return {
                 status: 404,
-                body: { error: "Nenhum item encontrado para o pedido" }
+                body: createErrorMessage(
+                    "ORDER_ITEM_NOT_FOUND",
+                    "Nenhum item encontrado para o pedido",
+                    "/pedidos/itens/:id"
+                )
             }
-            return response;
         }
 
         const orderItems = result.rows;
@@ -48,26 +56,30 @@ export const getAllOrderItemsByOrderIdService = async (order_id: string) => {
         return {
             status: 200,
             body: orderItems
-        };
+        }
     } catch (error) {
-        console.error("Erro ao buscar itens do pedido:", error);
         return {
             status: 500,
-            body: { error: "Erro interno do servidor" }
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/pedidos/itens/:id"
+            )
         };
     }
 }
 
 export const getOrderByIdService = async (order_id: string) => {
     try {
-        let response = null;
         const result = await OrderRepository.findOrderById(order_id);
         if (result.rows.length === 0) {
-            response = {
+            return {
                 status: 404,
-                body: { error: "Pedido não encontrado" }
+                body: createErrorMessage(
+                    "ORDER_NOT_FOUND",
+                    "Pedido não encontrado"
+                )
             }
-            return response;
         }
 
         const order = result.rows[0];
@@ -75,13 +87,15 @@ export const getOrderByIdService = async (order_id: string) => {
         return {
             status: 200,
             body: order
-        };
+        }
     } catch (error) {
-        console.error("Erro ao buscar pedido:", error);
         return {
             status: 500,
-            body: { error: "Erro interno do servidor" }
-        };
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor"
+            )
+        }
     }
 }
 
@@ -92,7 +106,11 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
         if (unitResult.rows.length === 0) {
             return {
                 status: 400,
-                body: { error: "Unidade não encontrada" }
+                body: createErrorMessage(
+                    "UNIT_NOT_FOUND",
+                    "Unidade não encontrada",
+                    "/pedidos"
+                )
             };
         }
 
@@ -102,7 +120,11 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
             if (productResult.rows.length === 0 || !productResult.rows[0].ativo) {
                 return {
                     status: 400,
-                    body: { error: `Produto ${item.produto_id} não encontrado ou inativo` }
+                    body: createErrorMessage(
+                        "PRODUCT_NOT_FOUND",
+                        `Produto ${item.produto_id} não encontrado ou inativo`,
+                        "/pedidos"
+                    )
                 };
             }
 
@@ -111,8 +133,12 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
             if (recipeResult.rows.length === 0) {
                 return {
                     status: 400,
-                    body: { error: `Receita não encontrada para o produto ${item.produto_id}` }
-                };
+                    body: createErrorMessage(
+                        "RECIPE_NOT_FOUND",
+                        `Receita não encontrada para o produto ${item.produto_id}`,
+                        "/pedidos"
+                    )
+                }
             }
 
             // Check stock availability for each ingredient
@@ -122,8 +148,12 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
                 if (stockResult.rows.length === 0) {
                     return {
                         status: 400,
-                        body: { error: `Item de estoque ${recipeItem.estoque_item_id} não encontrado` }
-                    };
+                        body: createErrorMessage(
+                            "STOCK_ITEM_NOT_FOUND",
+                            `Item de estoque ${recipeItem.estoque_item_id} não encontrado`,
+                            "/pedidos"
+                        )
+                    }
                 }
 
                 const requiredQuantity = recipeItem.quantidade_usada * item.quantidade;
@@ -132,8 +162,12 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
                 if (availableQuantity < requiredQuantity) {
                     return {
                         status: 400,
-                        body: { error: `Quantidade insuficiente em estoque para o item ${recipeItem.estoque_item_id}. Disponível: ${availableQuantity}, Necessário: ${requiredQuantity}` }
-                    };
+                        body: createErrorMessage(
+                            "INSUFFICIENT_STOCK",
+                            `Quantidade insuficiente em estoque para o item ${recipeItem.estoque_item_id}. Disponível: ${availableQuantity}, Necessário: ${requiredQuantity}`,
+                            "/pedidos"
+                        )
+                    }
                 }
             }
         }
@@ -174,7 +208,11 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
         console.error("Erro ao criar pedido:", error);
         return {
             status: 500,
-            body: { error: "Erro interno do servidor" }
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/pedidos"
+            )
         };
     }
 }

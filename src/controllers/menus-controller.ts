@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { getMenuService } from "../services/menus-service";
 
-export const getMenu = async (req: Request, res: Response) => {
+export const getMenuByUnitId = async (req: Request, res: Response) => {
     const unitId = req.params.id as string;
 
     let httpResponse = await getMenuService(unitId);

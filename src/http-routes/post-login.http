@@ -1,3 +1,4 @@
+# realiza um teste com um usuário inexistente
 POST http://localhost:3000/login
 Content-Type: application/json
 

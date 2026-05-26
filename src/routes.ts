@@ -16,14 +16,14 @@ router.get("/login", authMiddleware, UserController.getLogin);
 router.post("/login", UserController.postLogin);
 router.post("/register", UserController.postClient);
 
-router.get("/unidades", authMiddleware, roleMiddleware(["*"]), UnitControler.getUnits);
+router.get("/unidades", authMiddleware, roleMiddleware(["*"]), UnitControler.getAllUnits);
 
 router.get("/estoques/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), InventoryController.getInventoryItems);
 
-router.get("/cardapio/:id", authMiddleware, roleMiddleware(["*"]), MenuController.getMenu);
+router.get("/cardapio/:id", authMiddleware, roleMiddleware(["*"]), MenuController.getMenuByUnitId);
 
 router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrders);
-router.get("/pedidos/items/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrderItems);
+router.get("/pedidos/itens/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrderItems);
 router.post("/pedidos", authMiddleware, roleMiddleware(["admin", "atendente", "cliente"]), OrderController.createOrder);
 router.post("/pedido", OrderController.createOrder);
 

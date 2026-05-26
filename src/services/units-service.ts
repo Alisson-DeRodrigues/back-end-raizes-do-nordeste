@@ -1,16 +1,19 @@
 import { findAllUnits } from "../repositories/units-repository";
+import { createErrorMessage } from "../utils/error-message";
 
 export const getAllUnitsService = async () => {
     try {
-        let response = null;
         const result = await findAllUnits();
 
         if (result.rows.length === 0) {
-            response = {
+            return {
                 status: 404,
-                body: { error: "Nenhuma unidade encontrada" }
+                body: createErrorMessage(
+                    "UNIT_NOT_FOUND",
+                    "Nenhuma unidade encontrada",
+                    "/unidades",
+                )
             }
-            return response;
         }
 
         return {
@@ -22,7 +25,11 @@ export const getAllUnitsService = async () => {
         console.error(err);
         return {
             status: 500,
-            body: { error: "Erro no servidor" }
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/unidades",
+            )
         }
     }
 }

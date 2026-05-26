@@ -6,7 +6,7 @@ export interface ErrorDetail {
 export const createErrorMessage = (
     errorName: string,
     message: string,
-    path: string,
+    path?: string,
     details: ErrorDetail[] = [],
     requestId?: string
 ) => {
@@ -15,7 +15,7 @@ export const createErrorMessage = (
         message,
         details,
         timestamp: new Date().toISOString(),
-        path,
+        path: path || null,
         requestId: requestId || null
     };
 }

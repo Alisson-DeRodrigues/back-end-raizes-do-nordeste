@@ -1,9 +1,9 @@
 import { pool } from "../database";
 
-export const findInventoryItemsByUnitId = async (unitId: string) => {
+export const findInventoryItemsByUnitId = async (unidade_id: string) => {
     const result = await pool.query(
         "SELECT * FROM estoque_itens WHERE unidade_id = $1",
-        [unitId]
+        [unidade_id]
     );
 
     return result;

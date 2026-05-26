@@ -5,7 +5,6 @@ import { comparePassword, generateToken, hashPassword } from "./auth-service";
 
 export const userLoginService = async (email: string, password: string) => {
     try {
-        let response = null
         const result = await UserRepository.findUserByEmail(email);
     
         if (result.rows.length === 0) {
@@ -13,8 +12,9 @@ export const userLoginService = async (email: string, password: string) => {
                 status: 401,
                 body: createErrorMessage(
                     "LOGIN_UNAUTHORIZED",
-                    "Usuário ou senha inválidos",
+                    "Usuário não encontrado",
                     "/login",
+                    [{ field: "email", issue: "Email não encontrado no sistema" }]
                 )
             }
 
@@ -25,11 +25,15 @@ export const userLoginService = async (email: string, password: string) => {
         const valid = await comparePassword(password, user.senha);
     
         if (!valid) {
-            response = {
+            return {
                 status: 401,
-                body: { error: "Senha inválida" }
+                body: createErrorMessage(
+                    "LOGIN_UNAUTHORIZED",
+                    "Usuário ou senha inválidos",
+                    "/login",
+                    [{ field: "password", issue: "Senha incorreta" }]
+                )
             }
-            return response;
         }
     
         const token = generateToken(user.id, user.role);
@@ -45,23 +49,31 @@ export const userLoginService = async (email: string, password: string) => {
       } catch (err) {
         console.error(err);
         return {
-            status: 500,
-            body: { error: "Erro no servidor" }
-        }
+                status: 500,
+                body: createErrorMessage(
+                    "INTERNAL_SERVER_ERROR",
+                    "Erro interno do servidor",
+                    "/login",
+                )
+            }
+        
       }
 }
 
 export const registerClientService = async (unidade_id: number, name: string, email: string, password: string, ativo_programa_fidelidade: boolean) => {
     try {
-        let response = null;
         const existingUser = await UserRepository.findUserByEmail(email);
     
         if (existingUser.rows.length > 0) {
-            response = {
+            return {
                 status: 400,
-                body: { error: "Email já cadastrado" }
+                body: createErrorMessage(
+                    "USER_VALIDATION_ERROR",
+                    "Usuário já existe",
+                    "/register",
+                    [{ field: "email", issue: "Email já cadastrado" }]
+                )
             }
-            return response;
         }
     
         const hashedPassword = await hashPassword(password);
@@ -71,11 +83,14 @@ export const registerClientService = async (unidade_id: number, name: string, em
         const result = await UserRepository.createClient(unidade_id, name, email, hashedPassword, role, ativo_programa_fidelidade);
     
         if (result.rowCount === 0) {
-            response = {
+            return {
                 status: 500,
-                body: { error: "Erro ao criar usuário" }
+                body: createErrorMessage(
+                    "INTERNAL_SERVER_ERROR",
+                    "Erro interno do servidor",
+                    "/register",
+                )
             }
-            return response;
         }
     
         return {
@@ -87,7 +102,11 @@ export const registerClientService = async (unidade_id: number, name: string, em
         console.error(err);
         return {
             status: 500,
-            body: { error: "Erro no servidor" }
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/register",
+            )
         }
   }
 }
