@@ -33,3 +33,11 @@ export const createOrderItem = async (order_id: string, produto_cardapio_id: str
     );
     return result;
 };
+
+export const updateOrderStatus = async (order_id: string, status: string) => {
+    const result = await pool.query(
+        "UPDATE pedidos SET status = $1 WHERE id = $2;",
+        [status, order_id]
+    );
+    return result;
+}

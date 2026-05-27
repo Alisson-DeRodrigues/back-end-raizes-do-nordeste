@@ -101,6 +101,6 @@ CREATE TABLE pagamentos_pedidos (
 
     metodo_pagamento VARCHAR(30) NOT NULL, -- dinheiro, cartão, pix, mock
     valor NUMERIC(10,2) NOT NULL,
-    status VARCHAR(30) NOT NULL, -- pendente, pago, recusado
+    status VARCHAR(30) NOT NULL, -- pendente, pago, recusado, cancelado
     created_at TIMESTAMP DEFAULT NOW()
 );

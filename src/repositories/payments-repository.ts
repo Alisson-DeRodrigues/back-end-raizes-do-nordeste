@@ -12,8 +12,25 @@ export const findPaymentsByOrderId = async (id: string) => {
 
 export const insertPaymentPaid = async (payment: Payment) => {
     await pool.query(
-        "INSERT INTO pagamentos_pedidos (id, unidade_id, pedido_id, metodo_pagamento, valor, status) VALUES ($1, $2, $3, $4, $5, $6)",
+        "INSERT INTO pagamentos_pedidos (id, unidade_id, pedido_id, metodo_pagamento, valor, status) " +
+        "VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4, $5, $6)",
         [payment.id ?? null, payment.unidadeId, payment.pedidoId, payment.metodoPagamento, payment.valor, "pago"]
+    );
+}
+
+export const insertPaymentRefused = async (payment: Payment) => {
+    await pool.query(
+        "INSERT INTO pagamentos_pedidos (id, unidade_id, pedido_id, metodo_pagamento, valor, status) " +
+        "VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4, $5, $6)",
+        [payment.id ?? null, payment.unidadeId, payment.pedidoId, payment.metodoPagamento, payment.valor, "recusado"]
+    );
+}
+
+export const insertPaymentCanceled = async (payment: Payment) => {
+    await pool.query(
+        "INSERT INTO pagamentos_pedidos (id, unidade_id, pedido_id, metodo_pagamento, valor, status) " +
+        "VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4, $5, $6)",
+        [payment.id ?? null, payment.unidadeId, payment.pedidoId, payment.metodoPagamento, payment.valor, "cancelado"]
     );
 }
 

@@ -12,3 +12,11 @@ export interface Payment {
 export const registerPaymentApprovedService = async (payment: Payment) => {
     await PaymentRepository.insertPaymentPaid(payment);
 }
+
+export const registerPaymentRefusedService = async (payment: Payment) => {
+    await PaymentRepository.insertPaymentRefused(payment);
+}
+
+export const cancelPaymentService = async (payment: Payment) => {
+    await PaymentRepository.insertPaymentCanceled(payment);
+}

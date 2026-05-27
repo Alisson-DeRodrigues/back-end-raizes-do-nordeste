@@ -228,3 +228,110 @@ export const calculateOrderTotal = async (items: { produto_id: string; quantidad
     }
     return total;
 };
+
+// não deixar alterar um pedido já "entregue" ou "cancelado"
+export const updateOrderStatusService = async (order_id: string, status: string) => {
+    try {
+        const orderResult = await OrderRepository.findOrderById(order_id);
+        if (orderResult.rows.length === 0) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "ORDER_NOT_FOUND",
+                    "Pedido não encontrado",
+                    "/pedidos/:id"
+                )
+            }
+        }
+        
+        if (orderResult.rows[0].status === "entregue" || orderResult.rows[0].status === "cancelado") {
+            return {
+                status: 400,
+                body: createErrorMessage(
+                    "ORDER_STATUS_UPDATE_NOT_ALLOWED",
+                    "Não é permitido alterar o status de um pedido entregue ou cancelado",
+                    "/pedidos/:id"
+                )
+            }
+        }
+
+        await OrderRepository.updateOrderStatus(order_id, status);
+
+        return {
+            status: 200,
+            body: { message: "Status do pedido atualizado com sucesso" }
+        }
+    } catch (error) {
+        return {
+            status: 500,
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/pedidos/:id"
+            )
+        }
+    }
+}
+
+export const cancelOrderService = async (order_id: string) => {
+    try {
+        const orderResult = await OrderRepository.findOrderById(order_id);
+        if (orderResult.rows.length === 0) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "ORDER_NOT_FOUND",
+                    "Pedido não encontrado",
+                    "/pedidos/cancelar/:id"
+                )
+            }
+        }
+
+        const order = orderResult.rows[0];
+
+        if (order.status === "cancelado") {
+            return {
+                status: 400,
+                body: createErrorMessage(
+                    "ORDER_ALREADY_CANCELLED",
+                    "Pedido já está cancelado",
+                    "/pedidos/cancelar/:id"
+                )
+            }
+        }
+
+        if (order.status === "entregue") {
+            return {
+                status: 400,
+                body: createErrorMessage(
+                    "ORDER_ALREADY_DELIVERED",
+                    "Pedido já foi entregue",
+                    "/pedidos/cancelar/:id"
+                )
+            }
+        }
+
+        await OrderRepository.updateOrderStatus(order_id, "cancelado");
+        await PaymentRepository.insertPaymentCanceled({
+            unidadeId: order.unidade_id,
+            pedidoId: order.id,
+            metodoPagamento: order.forma_pagamento,
+            valor: order.total,
+            status: "cancelado"
+        });
+
+        return {
+            status: 200,
+            body: { message: "Pedido cancelado com sucesso" }
+        }
+    } catch (error) {
+        return {
+            status: 500,
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/pedidos/cancelar/:id"
+            )
+        }
+    }
+}

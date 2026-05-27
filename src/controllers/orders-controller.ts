@@ -2,17 +2,17 @@ import { Request, Response } from "express";
 import * as OrderService from "../services/orders-service";
 
 export const getOrders = async (req: Request, res: Response) => {
-    const unitId = req.params.id as string;
+    const unidade_id = req.params.id as string;
 
-    let httpResponse = await OrderService.getAllOrdersByUnitIdService(unitId);
+    let httpResponse = await OrderService.getAllOrdersByUnitIdService(unidade_id);
 
     return res.status(httpResponse.status).json(httpResponse.body);
 }
 
 export const getOrderItems = async (req: Request, res: Response) => {
-    const orderId = req.params.id as string;
+    const order_id = req.params.id as string;
 
-    let httpResponse = await OrderService.getAllOrderItemsByOrderIdService(orderId);
+    let httpResponse = await OrderService.getAllOrderItemsByOrderIdService(order_id);
 
     return res.status(httpResponse.status).json(httpResponse.body);
 }
@@ -33,3 +33,19 @@ export const createOrder = async (req: Request, res: Response) => {
     return res.status(httpResponse.status).json(httpResponse.body);
 }
 
+export const updateOrderStatus = async (req: Request, res: Response) => {
+    const order_id = req.params.id as string;
+    const status = req.body.status as string;
+
+    let httpResponse = await OrderService.updateOrderStatusService(order_id, status);
+
+    return res.status(httpResponse.status).json(httpResponse.body);
+}
+
+export const cancelOrder = async (req: Request, res: Response) => {
+    const order_id = req.params.id as string;
+
+    let httpResponse = await OrderService.cancelOrderService(order_id);
+
+    return res.status(httpResponse.status).json(httpResponse.body);
+}
