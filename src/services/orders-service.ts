@@ -143,7 +143,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
 
             // Check stock availability for each ingredient
             for (const recipeItem of recipeResult.rows) {
-                const stockResult = await InventoryRepository.findInventoryByItemId(recipeItem.estoque_item_id);
+                const stockResult = await InventoryRepository.findItemByItemId(recipeItem.estoque_item_id);
                 
                 if (stockResult.rows.length === 0) {
                     return {
@@ -193,7 +193,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
                 const requiredQuantity = recipeItem.quantidade_usada * item.quantidade;
                 await InventoryRepository.updateInventory(recipeItem.estoque_item_id, -requiredQuantity);
                 // Record stock movement
-                await InventoryRepository.createInventoryMovement(unidade_id, recipeItem.estoque_item_id, "saida", requiredQuantity);
+                await InventoryRepository.createInventoryMovement(unidade_id, recipeItem.estoque_item_id, recipeItem.nome, "saida", requiredQuantity);
             }
         }
 
@@ -229,7 +229,6 @@ export const calculateOrderTotal = async (items: { produto_id: string; quantidad
     return total;
 };
 
-// não deixar alterar um pedido já "entregue" ou "cancelado"
 export const updateOrderStatusService = async (order_id: string, status: string) => {
     try {
         const orderResult = await OrderRepository.findOrderById(order_id);

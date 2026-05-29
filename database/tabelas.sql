@@ -75,6 +75,7 @@ CREATE TABLE movimentacao_estoques (
     unidade_id UUID NOT NULL REFERENCES unidades(id),
     estoque_item_id UUID NOT NULL REFERENCES estoque_itens(id),
 
+    nome VARCHAR(255) NOT NULL,
     tipo VARCHAR(30) NOT NULL, -- entrada, saida, perda, ajuste
     quantidade NUMERIC(10,2) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()

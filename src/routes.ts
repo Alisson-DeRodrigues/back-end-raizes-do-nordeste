@@ -19,6 +19,9 @@ router.post("/register", UserController.postClient);
 router.get("/unidades", authMiddleware, roleMiddleware(["*"]), UnitControler.getAllUnits);
 
 router.get("/estoques/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), InventoryController.getInventoryItems);
+router.post("/estoques", authMiddleware, roleMiddleware(["admin", "cozinha"]), InventoryController.updateInventoryItem);
+
+router.post("/estoque", InventoryController.updateInventoryItem);
 
 router.get("/cardapio/:id", authMiddleware, roleMiddleware(["*"]), MenuController.getMenuByUnitId);
 
@@ -37,8 +40,8 @@ router.post("/pagamentos/:id", authMiddleware, roleMiddleware(["admin", "atenden
 router.post("/pagamento/:id", PaymentController.processPaymentMock);
 
 // log e auditoria
-router.get("/pagamentos-historico/:id", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
-router.get("/estoques-historico/:id", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
+router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
+router.get("/estoques/log/:id", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
 
 
 router.get("/financeiro", authMiddleware, roleMiddleware(["admin", "manager"]), FinanceController.getFinance);

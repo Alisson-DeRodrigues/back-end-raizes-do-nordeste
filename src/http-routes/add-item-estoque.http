@@ -1,0 +1,8 @@
+POST http://localhost:3000/estoque
+Content-Type: application/json
+
+{
+    "item_id": "eeeeeeee-0000-0000-0000-000000000010",
+    "quantidade": 10,
+    "acao": "adicionar"
+}

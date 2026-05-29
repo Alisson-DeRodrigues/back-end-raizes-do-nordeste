@@ -9,7 +9,7 @@ export const findInventoryItemsByUnitId = async (unidade_id: string) => {
     return result;
 }
 
-export const findInventoryByItemId = async (item_id: any) => {
+export const findItemByItemId = async (item_id: any) => {
     return pool.query("SELECT * FROM estoque_itens WHERE id = $1;", [item_id]);
 }
 
@@ -21,10 +21,10 @@ export const updateInventory = async (item_id: any, quantity: number) => {
     return result;
 };
 
-export const createInventoryMovement = async (unidade_id: string, estoque_item_id: string, tipo: string, quantidade: number) => {
+export const createInventoryMovement = async (unidade_id: string, estoque_item_id: string, nome: string, tipo: string, quantidade: number) => {
     const result = await pool.query(
-        "INSERT INTO movimentacao_estoques (unidade_id, estoque_item_id, tipo, quantidade) VALUES ($1, $2, $3, $4) RETURNING *;",
-        [unidade_id, estoque_item_id, tipo, quantidade]
+        "INSERT INTO movimentacao_estoques (unidade_id, estoque_item_id, nome, tipo, quantidade) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
+        [unidade_id, estoque_item_id, nome, tipo, quantidade]
     );
     return result;
 };
