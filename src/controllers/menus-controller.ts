@@ -1,10 +1,35 @@
 import { Request, Response } from "express";
-import { getMenuService } from "../services/menus-service";
+import * as MenuService from "../services/menus-service"
+
+
+export interface MenuItem {
+    id?: string;
+    unidade_id: string;
+    nome: string;
+    descricao: string;
+    ativo: boolean;
+    preco: number;
+}
+
+export interface RecipeItem {
+    id?: string;
+    produto_cardapio_id: string;
+    estoque_item_id: string;
+    quantidade_usada: number;
+}
 
 export const getMenuByUnitId = async (req: Request, res: Response) => {
     const unitId = req.params.id as string;
 
-    let httpResponse = await getMenuService(unitId);
+    let httpResponse = await MenuService.getMenuService(unitId);
+
+    return res.status(httpResponse.status).json(httpResponse.body);
+}
+
+export const createMenuItem = async (req: Request, res: Response) => {
+    const item: MenuItem = req.body;
+
+    let httpResponse = await MenuService.createMenuItemService(item);
 
     return res.status(httpResponse.status).json(httpResponse.body);
 }

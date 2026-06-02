@@ -1,3 +1,4 @@
+import { MenuItem } from "../controllers/menus-controller";
 import { pool } from "../database";
 
 export const findMenuByUnitId = async (unitId: string) => {
@@ -15,4 +16,12 @@ export const findProductById = async (produto_id: string) => {
 
 export const findRecipeByProductId = async (produto_id: string) => {
     return pool.query("SELECT * FROM receita_produtos WHERE produto_cardapio_id = $1;", [produto_id]);
+}
+
+export const createMenuItem = async (menuItem: MenuItem) => {
+    return pool.query(
+        "INSERT INTO produtos_cardapio (id, unidade_id, nome, descricao, ativo, preco) " +
+        " VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4, $5, $6) RETURNING *;",
+        [menuItem.id ?? null, menuItem.unidade_id, menuItem.nome, menuItem.descricao, menuItem.ativo, menuItem.preco]
+    );
 }

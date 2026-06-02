@@ -1,0 +1,11 @@
+POST http://localhost:3000/cardapios
+Content-Type: application/json
+
+{
+    "id": "cccccccc-0000-0000-0000-000000000004",
+    "unidade_id": "22222222-2222-2222-2222-222222222222",
+    "nome": "Hambúrguer de Frango",
+    "descricao": "Delicioso hambúrguer de frango com alface, tomate e maionese.",
+    "preco": 19.90,
+    "ativo": true
+}

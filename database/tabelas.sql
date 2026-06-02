@@ -33,7 +33,7 @@ CREATE TABLE produtos_cardapio (
 
     nome VARCHAR(255) NOT NULL,
     descricao TEXT, --- opcional
-    ativo BOOLEAN DEFAULT TRUE,
+    ativo BOOLEAN DEFAULT FALSE,
     preco NUMERIC(10,2) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
