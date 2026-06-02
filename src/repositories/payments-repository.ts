@@ -10,6 +10,15 @@ export const findPaymentsByOrderId = async (id: string) => {
   return result;
 }
 
+export const findPaymentsByUnitId = async (unidade_id: string) => {
+    const result = await pool.query(
+        "SELECT * FROM pagamentos_pedidos WHERE unidade_id = $1 ORDER BY created_at DESC",
+        [unidade_id]
+    );
+
+    return result;
+}
+
 export const insertPaymentPaid = async (payment: Payment) => {
     await pool.query(
         "INSERT INTO pagamentos_pedidos (id, unidade_id, pedido_id, metodo_pagamento, valor, status) " +

@@ -8,7 +8,8 @@ import * as UnitControler from "./controllers/units-controller";
 import * as MenuController from "./controllers/menus-controller";
 import * as OrderController from "./controllers/orders-controller";
 import * as InventoryController from "./controllers/inventories-controller";
-import * as PaymentController from "./controllers/payments-mock-controller";
+import * as PaymentController from "./controllers/payments-controller";
+import * as PaymentMockController from "./controllers/payments-mock-controller";
 
 const router = Router();
 
@@ -16,18 +17,22 @@ router.get("/login", authMiddleware, UserController.getLogin);
 router.post("/login", UserController.postLogin);
 router.post("/register", UserController.postClient);
 
+
 router.get("/unidades", authMiddleware, roleMiddleware(["*"]), UnitControler.getAllUnits);
+
 
 router.get("/estoques/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), InventoryController.getInventoryItems);
 router.post("/estoques/update", authMiddleware, roleMiddleware(["admin", "cozinha"]), InventoryController.updateInventoryItem);
 router.post("/estoques/new", authMiddleware, roleMiddleware(["admin"]), InventoryController.createInventoryItem);
 router.get("/estoques/log/:id", authMiddleware, roleMiddleware(["admin", "manager"]), InventoryController.getInventoryLog);
-router.get("/estoque/log/:id", InventoryController.getInventoryLog);
 
 router.post("/estoque", InventoryController.updateInventoryItem);
 router.post("/estoque/new", InventoryController.createInventoryItem);
+router.get("/estoque/log/:id", InventoryController.getInventoryLog);
+
 
 router.get("/cardapio/:id", authMiddleware, roleMiddleware(["*"]), MenuController.getMenuByUnitId);
+
 
 router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrders);
 router.get("/pedidos/itens/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrderItems);
@@ -40,11 +45,11 @@ router.post("/pedido", OrderController.createOrder);
 router.put("/pedido/cancelar/:id", OrderController.cancelOrder);
 
 
-router.post("/pagamentos/:id", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentController.processPaymentMock);
-router.post("/pagamento/:id", PaymentController.processPaymentMock);
+router.post("/pagamentos/:id", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentMockController.processPaymentMock);
+router.post("/pagamento/:id", PaymentMockController.processPaymentMock);
+router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "manager"]), PaymentController.getPaymentLog);
 
-// log e auditoria
-router.get("/pagamentos/historico/:id", authMiddleware, roleMiddleware(["admin", "manager"]), () => {});
+router.get("/pagamento/log/:id", PaymentController.getPaymentLog);
 
 
 router.get("/financeiro", authMiddleware, roleMiddleware(["admin", "manager"]), FinanceController.getFinance);
