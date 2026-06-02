@@ -2,6 +2,7 @@ POST http://localhost:3000/estoque
 Content-Type: application/json
 
 {
+    "unidade_id": "22222222-2222-2222-2222-222222222222",
     "item_id": "eeeeeeee-0000-0000-0000-000000000010",
     "quantidade": 10,
     "acao": "adicionar"
