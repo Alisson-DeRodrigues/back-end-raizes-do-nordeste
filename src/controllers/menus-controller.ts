@@ -33,3 +33,19 @@ export const createMenuItem = async (req: Request, res: Response) => {
 
     return res.status(httpResponse.status).json(httpResponse.body);
 }
+
+export const createRecipeItem = async (req: Request, res: Response) => {
+    const item: RecipeItem = req.body;
+
+    let httpResponse = await MenuService.createRecipeItemService(item);
+
+    return res.status(httpResponse.status).json(httpResponse.body);
+}
+
+export const getRecipeByProductId = async (req: Request, res: Response) => {
+    const productId = req.params.id as string;
+
+    let httpResponse = await MenuService.getRecipeByProductIdService(productId);
+
+    return res.status(httpResponse.status).json(httpResponse.body);
+}

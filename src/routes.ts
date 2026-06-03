@@ -33,9 +33,13 @@ router.get("/estoque/log/:id", InventoryController.getInventoryLog);
 
 router.get("/cardapio/:id", authMiddleware, roleMiddleware(["*"]), MenuController.getMenuByUnitId);
 router.post("/cardapio", authMiddleware, roleMiddleware(["admin"]), MenuController.createMenuItem);
+router.post("/cardapio/recipe", authMiddleware, roleMiddleware(["admin"]), MenuController.createRecipeItem);
+router.get("/cardapio/recipe/:id", authMiddleware, roleMiddleware(["admin"]), MenuController.getRecipeByProductId);
 
 router.get("/cardapios/:id", MenuController.getMenuByUnitId);
 router.post("/cardapios", MenuController.createMenuItem);
+router.post("/cardapios/recipe", MenuController.createRecipeItem);
+router.get("/cardapios/recipe/:id", MenuController.getRecipeByProductId);
 
 
 router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrders);
