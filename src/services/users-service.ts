@@ -20,9 +20,9 @@ export const userLoginService = async (email: string, password: string) => {
 
         }
     
-        const user = result.rows[0];
+        const usuario = result.rows[0];
 
-        const valid = await comparePassword(password, user.senha);
+        const valid = await comparePassword(password, usuario.senha);
     
         if (!valid) {
             return {
@@ -36,7 +36,7 @@ export const userLoginService = async (email: string, password: string) => {
             }
         }
     
-        const token = generateToken(user.id, user.role);
+        const token = generateToken(usuario.id, usuario.role);
     
         return {
             status: 200,
@@ -46,8 +46,7 @@ export const userLoginService = async (email: string, password: string) => {
             }
         };
     
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
         return {
                 status: 500,
                 body: createErrorMessage(
@@ -98,8 +97,8 @@ export const registerClientService = async (unidade_id: number, name: string, em
             body: { message: "Cliente registrado com sucesso" }
         };
     
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
         return {
             status: 500,
             body: createErrorMessage(
@@ -109,4 +108,81 @@ export const registerClientService = async (unidade_id: number, name: string, em
             )
         }
   }
+}
+
+export const getLoginService = async (usuario_id: number | undefined, usuario_role: string | undefined) => {
+    try {
+        if (!usuario_id || !usuario_role) {
+            return {
+                status: 401,
+                body: createErrorMessage(
+                    "UNAUTHORIZED",
+                    "Usuário não autenticado",
+                    "/login"
+                )
+            }
+        }
+
+        return {
+            status: 200,
+            body: {
+                message: "Perfil do usuário",
+                userId: usuario_id,
+                role: usuario_role
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            status: 500,
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/login",
+            )
+        }
+    }
+}
+
+export const updateClientFidelityPointsService = async (usuario_id: number | undefined, ativo_programa_fidelidade: boolean) => {
+    try {
+        if (!usuario_id) {
+            return {
+                status: 401,
+                body: createErrorMessage(
+                    "UNAUTHORIZED",
+                    "Usuário não autenticado",
+                    "/clientes/fidelidade"
+                )
+            }
+        }
+
+        const result = await UserRepository.updateClientFidelityPoints(usuario_id, ativo_programa_fidelidade);
+
+        if (result.rowCount === 0) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "USER_NOT_FOUND",
+                    "Usuário não encontrado",
+                    "/clientes/fidelidade"
+                )
+            }
+        }
+
+        return {
+            status: 200,
+            body: { message: "Pontos de fidelidade atualizados com sucesso" }
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            status: 500,
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/clientes/fidelidade"
+            )
+        }
+    }
 }

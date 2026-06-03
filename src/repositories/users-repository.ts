@@ -15,3 +15,10 @@ export const createClient = async (unidade_id: number, name: string, email: stri
         [unidade_id, name, email, hashedPassword, role, ativo_programa_fidelidade]
     );
 }
+
+export const updateClientFidelityPoints = async (usuario_id: number, ativo_programa_fidelidade: boolean) => {
+    return await pool.query(
+        "UPDATE usuarios SET ativo_programa_fidelidade = $2 WHERE id = $1",
+        [usuario_id, ativo_programa_fidelidade]
+    );
+}

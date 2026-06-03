@@ -1,0 +1,7 @@
+POST http://localhost:3000/clientes/fidelidade
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJhMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwNCIsInJvbGUiOiJjbGllbnRlIiwiaWF0IjoxNzgwNTAzMTExLCJleHAiOjE3ODA1MDY3MTF9.IMhU0rcD1ejjh8beR9Va1PMPG4Ov33mFI4cVbVIciEs
+
+{
+    "ativo_programa_fidelidade": true
+}

@@ -16,6 +16,7 @@ const router = Router();
 router.get("/login", authMiddleware, UserController.getLogin);
 router.post("/login", UserController.postLogin);
 router.post("/register", UserController.postClient);
+router.post("/clientes/fidelidade", authMiddleware, roleMiddleware(["cliente"]), UserController.updateClientFidelityPoints);
 
 
 router.get("/unidades", authMiddleware, roleMiddleware(["*"]), UnitControler.getAllUnits);
