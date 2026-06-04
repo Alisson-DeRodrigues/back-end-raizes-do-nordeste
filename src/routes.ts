@@ -63,6 +63,14 @@ router.get("/pagamento/log/:id", PaymentController.getPaymentLog);
 
 
 router.get("/cupons/:id", authMiddleware, roleMiddleware(["admin"]), CuponController.getCoupons);
+router.post("/cupons", authMiddleware, roleMiddleware(["admin"]), CuponController.createCoupon);
+router.post("/cupons/private", authMiddleware, roleMiddleware(["admin"]), CuponController.createPrivateCoupon);
+
+
+router.get("/cupon", CuponController.getCoupons);
+router.post("/cupon", CuponController.createCoupon);
+router.post("/cupon/private", CuponController.createPrivateCoupon);
+
 
 router.get("/financeiro", authMiddleware, roleMiddleware(["admin", "manager"]), FinanceController.getFinance);
 

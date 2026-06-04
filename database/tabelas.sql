@@ -97,7 +97,6 @@ CREATE TABLE usuarios (
 -- esquema para pagamentos
 CREATE TABLE pagamentos_pedidos (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    unidade_id UUID NOT NULL REFERENCES unidades(id),
     pedido_id UUID NOT NULL REFERENCES pedidos(id),
 
     metodo_pagamento VARCHAR(30) NOT NULL, -- dinheiro, cartão, pix, mock
@@ -108,14 +107,13 @@ CREATE TABLE pagamentos_pedidos (
 
 -- esquema para cupons
 CREATE TABLE cupons (
-    id UUID PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     unidade_id UUID NOT NULL REFERENCES unidades(id),
 
     codigo VARCHAR(50) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT,
     publico BOOLEAN DEFAULT FALSE,
-
     tipo VARCHAR(30) NOT NULL, -- porcentagem, valor_fixo
     valor NUMERIC(10,2) NOT NULL,
     valor_minimo_pedido NUMERIC(10,2),
@@ -129,17 +127,18 @@ CREATE TABLE cupons (
 );
 
 CREATE TABLE cupons_clientes (
-    id UUID PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    unidade_id UUID NOT NULL REFERENCES unidades(id),
     usuario_id UUID NOT NULL REFERENCES usuarios(id),
     cupom_id UUID NOT NULL REFERENCES cupons(id),
 
-    atribuido_em TIMESTAMP DEFAULT NOW(),
     usado_em TIMESTAMP,
-    status VARCHAR(20) DEFAULT 'disponivel' -- disponivel, usado, expirado
+    status VARCHAR(20) DEFAULT 'disponivel', -- disponivel, usado, expirado
+    atribuido_em TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE pontos_transacao (
-    id UUID PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     unidade_id UUID NOT NULL REFERENCES unidades(id),
     usuario_id UUID NOT NULL REFERENCES usuarios(id),
 

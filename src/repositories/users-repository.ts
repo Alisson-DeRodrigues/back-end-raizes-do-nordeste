@@ -11,12 +11,10 @@ export const findUserByEmail = async (email: string) => {
 }
 
 export const findUserById = async (id: string) => {
-    const result = await pool.query(
+    return await pool.query(
         "SELECT * FROM usuarios WHERE id = $1",
         [id]
     );
-
-    return result;
 }
 
 export const createClient = async (unidade_id: number, name: string, email: string, hashedPassword: any, role: string, ativo_programa_fidelidade: boolean) => {
