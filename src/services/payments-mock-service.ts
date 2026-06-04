@@ -2,7 +2,8 @@ import { findPaymentsByOrderId } from "../repositories/payments-repository";
 import * as PaymentService from "./payments-service";
 import { getOrderByIdService } from "./orders-service";
 import { createErrorMessage } from "../utils/error-message";
-import { findUserByEmail, updateClientPoints } from "../repositories/users-repository";
+import { findUserByEmail, updateClientPoints } from "../repositories/users-repository"; // criar um service para isso depois
+import { registerClientPointTransactionService } from "./users-service";
 
 export async function processPaymentService(order_id: string, cliente_email: string) {
     try {
@@ -49,7 +50,17 @@ export async function processPaymentService(order_id: string, cliente_email: str
             await PaymentService.registerPaymentApprovedService(registerPayment);
 
             if (user.rows[0].ativo_programa_fidelidade) {
-                await updateClientPoints(user.rows[0].id, order.body.total);
+                if (order.body.total >= 1){
+                    const pontos_ganhos = Math.floor(order.body.total);
+                    await updateClientPoints(user.rows[0].id, pontos_ganhos);
+                    await registerClientPointTransactionService({
+                        unidade_id: order.body.unidade_id,
+                        usuario_id: user.rows[0].id,
+                        pontos: pontos_ganhos,
+                        tipo_transacao: "ganho",
+                        descricao: `Acúmulo de pontos pelo pedido ${order.body.id}`
+                    });
+                }
             }
 
             return {

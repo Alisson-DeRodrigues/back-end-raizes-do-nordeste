@@ -84,7 +84,7 @@ CREATE TABLE movimentacao_estoques (
 -- esquema para usuários (clientes e funcionários)
 CREATE TABLE usuarios (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    unidade_id UUID REFERENCES unidades(id),
+    unidade_id UUID NOT NULL REFERENCES unidades(id),
 
     nome VARCHAR(255),
     email VARCHAR(255) UNIQUE,
@@ -97,11 +97,54 @@ CREATE TABLE usuarios (
 -- esquema para pagamentos
 CREATE TABLE pagamentos_pedidos (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    unidade_id UUID REFERENCES unidades(id),
+    unidade_id UUID NOT NULL REFERENCES unidades(id),
     pedido_id UUID NOT NULL REFERENCES pedidos(id),
 
     metodo_pagamento VARCHAR(30) NOT NULL, -- dinheiro, cartão, pix, mock
     valor NUMERIC(10,2) NOT NULL,
     status VARCHAR(30) NOT NULL, -- pendente, pago, recusado, cancelado
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- esquema para cupons
+CREATE TABLE cupons (
+    id UUID PRIMARY KEY,
+    unidade_id UUID NOT NULL REFERENCES unidades(id),
+
+    codigo VARCHAR(50) UNIQUE NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    descricao TEXT,
+    publico BOOLEAN DEFAULT FALSE,
+
+    tipo VARCHAR(30) NOT NULL, -- porcentagem, valor_fixo
+    valor NUMERIC(10,2) NOT NULL,
+    valor_minimo_pedido NUMERIC(10,2),
+    inicia_em TIMESTAMP DEFAULT NOW(),
+    expira_em TIMESTAMP,
+    max_usos INTEGER,
+    usos_atuais INTEGER DEFAULT 0,
+    ativo BOOLEAN DEFAULT TRUE,
+
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE cupons_clientes (
+    id UUID PRIMARY KEY,
+    usuario_id UUID NOT NULL REFERENCES usuarios(id),
+    cupom_id UUID NOT NULL REFERENCES cupons(id),
+
+    atribuido_em TIMESTAMP DEFAULT NOW(),
+    usado_em TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'disponivel' -- disponivel, usado, expirado
+);
+
+CREATE TABLE pontos_transacao (
+    id UUID PRIMARY KEY,
+    unidade_id UUID NOT NULL REFERENCES unidades(id),
+    usuario_id UUID NOT NULL REFERENCES usuarios(id),
+
+    pontos INTEGER NOT NULL,
+    tipo_transacao VARCHAR(20) NOT NULL, -- ganho, resgate, expirado
+    descricao TEXT,
     created_at TIMESTAMP DEFAULT NOW()
 );

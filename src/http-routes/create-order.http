@@ -16,5 +16,5 @@ Content-Type: application/json
         }
     ],
     "canal_pedido": "totem",
-    "forma_pagamento": "credito3"
+    "forma_pagamento": "debito5"
 }

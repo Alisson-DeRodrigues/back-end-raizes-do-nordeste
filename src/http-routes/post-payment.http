@@ -2,6 +2,6 @@ POST http://localhost:3000/pagamento
 Content-Type: application/json
 
 {
-    "order_id": "7afb6869-7b6a-4430-92cc-738d32bc3c01",
+    "order_id": "958a6b3e-e894-440d-887d-41d05cf5c091",
     "cliente_email": "cliente@email.com"
 }

@@ -1,4 +1,5 @@
 import { pool } from "../database";
+import { ClientPointTransaction } from "../services/users-service";
 
 export const findUserByEmail = async (email: string) => {
   const result = await pool.query(
@@ -36,5 +37,13 @@ export const updateClientPoints = async (usuario_id: string, pontos: number) => 
     return await pool.query(
         "UPDATE usuarios SET pontos = pontos + $2 WHERE id = $1",
         [usuario_id, pontos]
+    );
+}
+
+export const registerClientPointTransaction = async (transacao: ClientPointTransaction) => {
+    return await pool.query(
+        "INSERT INTO pontos_transacao (id, unidade_id, usuario_id, pontos, tipo_transacao, descricao) " +
+        "VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4, $5, $6)",
+        [transacao.id ?? null, transacao.unidade_id, transacao.usuario_id, transacao.pontos, transacao.tipo_transacao, transacao.descricao]
     );
 }
