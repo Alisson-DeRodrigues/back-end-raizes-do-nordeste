@@ -10,6 +10,7 @@ import * as OrderController from "./controllers/orders-controller";
 import * as InventoryController from "./controllers/inventories-controller";
 import * as PaymentController from "./controllers/payments-controller";
 import * as PaymentMockController from "./controllers/payments-mock-controller";
+import * as CuponController from "./controllers/coupons-controller";
 
 const router = Router();
 
@@ -54,12 +55,14 @@ router.post("/pedido", OrderController.createOrder);
 router.put("/pedido/cancelar/:id", OrderController.cancelOrder);
 
 
-router.post("/pagamentos/:id", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentMockController.processPaymentMock);
-router.post("/pagamento/:id", PaymentMockController.processPaymentMock);
+router.post("/pagamentos", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentMockController.processPaymentMock);
+router.post("/pagamento", PaymentMockController.processPaymentMock);
 router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "manager"]), PaymentController.getPaymentLog);
 
 router.get("/pagamento/log/:id", PaymentController.getPaymentLog);
 
+
+router.get("/cupons/:id", authMiddleware, roleMiddleware(["admin"]), CuponController.getCoupons);
 
 router.get("/financeiro", authMiddleware, roleMiddleware(["admin", "manager"]), FinanceController.getFinance);
 

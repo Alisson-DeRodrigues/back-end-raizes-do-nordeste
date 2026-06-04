@@ -1,1 +1,7 @@
-POST http://localhost:3000/pagamento/f0000000-0000-0000-0000-000000000001
+POST http://localhost:3000/pagamento
+Content-Type: application/json
+
+{
+    "order_id": "7afb6869-7b6a-4430-92cc-738d32bc3c01",
+    "cliente_email": "cliente@email.com"
+}

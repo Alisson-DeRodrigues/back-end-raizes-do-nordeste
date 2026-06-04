@@ -186,3 +186,7 @@ export const updateClientFidelityPointsService = async (usuario_id: number | und
         }
     }
 }
+
+export const updateClientPoints = async (usuario_id: string, pontos: number) => {
+    return await UserRepository.updateClientPoints(usuario_id, pontos);
+}

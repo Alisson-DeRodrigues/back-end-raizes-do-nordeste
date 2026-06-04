@@ -178,31 +178,31 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
         const status = "cozinha"
 
         const orderResult = await OrderRepository.createOrder(unidade_id, total, canal_pedido, forma_pagamento, status);
-        const orderId = orderResult.rows[0].id;
+        const order_id = orderResult.rows[0].id;
 
         // Create order items
         for (const item of orderData.items) {
             const productResult = await MenuRepository.findProductById(item.produto_id);
             const product = productResult.rows[0];
             const subtotal = product.preco * item.quantidade;
-            await OrderRepository.createOrderItem(orderId, item.produto_id, item.quantidade, product.preco, subtotal);
+            await OrderRepository.createOrderItem(order_id, item.produto_id, item.quantidade, product.preco, subtotal);
 
             // Deduct from stock and record movement
-            const recipeResult = await MenuRepository.findRecipeByProductId(item.produto_id);
+            const recipeResult = await MenuRepository.findRecipeByProductIdExtended(item.produto_id);
             for (const recipeItem of recipeResult.rows) {
                 const requiredQuantity = recipeItem.quantidade_usada * item.quantidade;
                 await InventoryRepository.updateInventory(recipeItem.estoque_item_id, -requiredQuantity);
                 // Record stock movement
-                await InventoryRepository.createInventoryMovement(unidade_id, recipeItem.estoque_item_id, recipeItem.nome, "saida", requiredQuantity);
+                await InventoryRepository.createInventoryMovement(unidade_id, recipeItem.estoque_item_id, recipeItem.nome_ingrediente, "saida", requiredQuantity);
             }
         }
 
         // Create pending payment record
-        await PaymentRepository.createOrderPayment(unidade_id, orderId, forma_pagamento, total, "pendente");
+        await PaymentRepository.createOrderPayment(unidade_id, order_id, forma_pagamento, total, "pendente");
 
         return {
             status: 201,
-            body: { orderId, message: "Pedido criado com sucesso" }
+            body: { order_id, message: "Pedido criado com sucesso" }
         };
     } catch (error) {
         console.error("Erro ao criar pedido:", error);

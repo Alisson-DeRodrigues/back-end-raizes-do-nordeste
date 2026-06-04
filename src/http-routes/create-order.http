@@ -15,6 +15,6 @@ Content-Type: application/json
             "quantidade": 4
         }
     ],
-    "canal_pedido": "app",
-    "forma_pagamento": "dinheiro"
+    "canal_pedido": "totem",
+    "forma_pagamento": "credito3"
 }
