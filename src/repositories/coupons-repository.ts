@@ -1,10 +1,10 @@
 import { pool } from "../database";
 import { Coupon, PrivateCoupon } from "../services/coupons-service";
 
-export const findCouponByCodeAndUnitId = async (codigo: string, unidade_id: string) => {
+export const findCouponByCodeAndUnitId = async (cupom_codigo: string, unidade_id: string) => {
     return await pool.query(
         "SELECT * FROM cupons WHERE codigo = $1 AND unidade_id = $2",
-        [codigo, unidade_id]
+        [cupom_codigo, unidade_id]
     );
 }
 
@@ -24,6 +24,13 @@ export const findAllCoupons = async () => {
 export const findPrivateCouponsByUserIdAndCouponId = async (usuario_id: string, cupom_id: string) => {
     return await pool.query(
         "SELECT * FROM cupons_clientes WHERE usuario_id = $1 AND cupom_id = $2",
+        [usuario_id, cupom_id]
+    );
+}
+
+export const findAvailablePrivateCoupons = async (usuario_id: string, cupom_id: string) => {
+    return await pool.query(
+        "SELECT * FROM cupons_clientes WHERE usuario_id = $1 AND cupom_id = $2 AND status = 'disponivel'",
         [usuario_id, cupom_id]
     );
 }
@@ -54,5 +61,19 @@ export const createPrivateCoupon = async (cupom: PrivateCoupon) => {
         "INSERT INTO cupons_clientes (id, unidade_id, usuario_id, cupom_id) " +
         "VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4)",
         [cupom.id ?? null, cupom.unidade_id, cupom.usuario_id, cupom.cupom_id]
+    );
+}
+
+export const updateCouponStatusToUsed = async (id: string) => {
+    return await pool.query(
+        "UPDATE cupons_clientes SET status = 'usado' WHERE id = $1",
+        [id]
+    );
+}
+
+export const incrementCouponUsage = async (id: string) => {
+    return await pool.query(
+        "UPDATE cupons SET usos_atuais = usos_atuais + 1 WHERE id = $1",
+        [id]
     );
 }

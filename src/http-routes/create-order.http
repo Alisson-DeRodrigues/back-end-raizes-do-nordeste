@@ -15,6 +15,6 @@ Content-Type: application/json
             "quantidade": 4
         }
     ],
-    "canal_pedido": "totem",
+    "canal_pedido": "totem-cupom5",
     "forma_pagamento": "debito5"
 }

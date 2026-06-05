@@ -4,8 +4,9 @@ import { getOrderByIdService } from "./orders-service";
 import { createErrorMessage } from "../utils/error-message";
 import { findUserByEmail, updateClientPoints } from "../repositories/users-repository"; // criar um service para isso depois
 import { registerClientPointTransactionService } from "./users-service";
+import { findCouponByCodeAndUnitId } from "../repositories/coupons-repository";
 
-export async function processPaymentService(order_id: string, cliente_email: string) {
+export async function processPaymentService(order_id: string, cliente_email: string, cupom_codigo?: string) {
     try {
         await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -34,6 +35,17 @@ export async function processPaymentService(order_id: string, cliente_email: str
                 )
             }
         }
+        
+        //let valor_desconto = cupom_codigo ? await PaymentService.useCouponService2(order.body.unidade_id, order.body.id, user.rows[0].id, cupom_codigo) : 0;
+
+        let useCouponResponse = cupom_codigo 
+    ? await PaymentService.useCouponService(order.body.unidade_id, order.body.id, user.rows[0].id, cupom_codigo) 
+    : null;
+
+// Busca .body.desconto se o status for 200
+let valor_desconto = (useCouponResponse && useCouponResponse.status === 200) 
+    ? (useCouponResponse.body as any).desconto 
+    : 0;
 
         const random = Math.random();
 
@@ -43,10 +55,10 @@ export async function processPaymentService(order_id: string, cliente_email: str
                 unidadeId: order.body.unidade_id,
                 pedidoId: order.body.id,
                 metodoPagamento: order.body.forma_pagamento,
-                valor: order.body.total,
+                valor: order.body.total - (valor_desconto || 0),
                 status: "pago"
             }
-
+           
             await PaymentService.registerPaymentApprovedService(registerPayment);
 
             if (user.rows[0].ativo_programa_fidelidade) {
@@ -62,7 +74,7 @@ export async function processPaymentService(order_id: string, cliente_email: str
                     });
                 }
             }
-
+  
             return {
                 status: 200,
                 body: {
