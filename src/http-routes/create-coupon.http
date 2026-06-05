@@ -4,14 +4,14 @@ Content-Type: application/json
 {
     "unidade_id": "22222222-2222-2222-2222-222222222222",
 
-    "codigo": "CUPOM10P",
-    "nome": "Desconto de 10 reais",
-    "descricao": "Desconto de 10 reais para pedidos acima de R$100",
+    "codigo": "CUPOM10RESGATE",
+    "nome": "Desconto de 10 reais por resgate de pontos",
+    "descricao": "Desconto de 10 reais para pedidos acima de R$100 resgatado por pontos",
     "publico": false,
     "tipo": "fixo",
     "valor": 10,
     "valor_minimo_pedido": 100,
     "inicia_em": null,
     "expira_em": "2027-12-31T23:59:59Z",
-    "max_usos": 100
+    "max_usos": 0
 }

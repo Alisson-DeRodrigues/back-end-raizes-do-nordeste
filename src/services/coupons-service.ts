@@ -1,7 +1,7 @@
 import { createErrorMessage } from "../utils/error-message";
 import { getUnitByIdService } from "./units-service";
 import * as CouponRepository from "../repositories/coupons-repository";
-import { findUserById } from "../repositories/users-repository";
+import { findUserById, updateClientPoints } from "../repositories/users-repository";
 
 export const getAllCouponsService = async () => {
         const result = await CouponRepository.findAllCoupons();
@@ -131,6 +131,86 @@ export const createPrivateCouponService = async (cupom: PrivateCoupon) => {
                 "INTERNAL_SERVER_ERROR",
                 "Erro interno do servidor",
                 "/cupons/private"
+            )
+        };       
+    }
+}
+
+export interface RedeemCoupon {
+    usuario_id: string;
+    unidade_id: string;
+    codigo_id: string;
+}
+
+export const redeemCouponService = async (cupom: RedeemCoupon) => {
+    try {
+        const usuario_existe = await findUserById(cupom.usuario_id);
+        const cupom_existe = await CouponRepository.findCouponByCodeAndUnitId(cupom.codigo_id, cupom.unidade_id);
+
+        if(usuario_existe.rows.length === 0) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "USER_NOT_FOUND",
+                    "Usuário não encontrado",
+                    "/cupons/resgate"
+                )
+            };
+        } 
+
+        if (cupom_existe.rows.length === 0) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "COUPON_NOT_FOUND",
+                    "Cupom não encontrado",
+                    "/cupons/resgate"
+                )
+            };
+        }
+
+        if (usuario_existe.rows[0].pontos < cupom_existe.rows[0].valor) {
+            return {
+                status: 400,
+                body: createErrorMessage(
+                    "INSUFFICIENT_POINTS",
+                    "Pontos insuficientes para resgatar este cupom",
+                    "/cupons/resgate"
+                )
+            };
+        }
+
+        if (usuario_existe.rows[0].pontos >= cupom_existe.rows[0].valor){
+            await updateClientPoints(cupom.usuario_id, -cupom_existe.rows[0].valor);
+            await createPrivateCouponService({
+                unidade_id: cupom.unidade_id,
+                usuario_id: cupom.usuario_id,
+                cupom_id: cupom_existe.rows[0].id
+            });
+
+            return {
+                status: 201,
+                body: { message: "Cupom resgatado com sucesso", usuario: usuario_existe.rows[0], cupom: cupom_existe.rows[0] }
+            };
+        }
+
+        return {
+            status: 400,
+            body: createErrorMessage(
+                "UNKNOWN_ERROR",
+                "Ocorreu um erro desconhecido ao resgatar o cupom",
+                "/cupons/resgate"
+            )
+        };
+        
+    } catch(error){
+        console.log(error);
+        return {
+            status: 500,
+            body: createErrorMessage(
+                "INTERNAL_SERVER_ERROR",
+                "Erro interno do servidor",
+                "/cupons/resgate"
             )
         };       
     }

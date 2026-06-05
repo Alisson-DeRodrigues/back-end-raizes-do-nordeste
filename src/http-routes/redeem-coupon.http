@@ -1,0 +1,8 @@
+POST http://localhost:3000/cupon/resgate
+Content-Type: application/json
+
+{
+    "usuario_id": "ba000000-0000-0000-0000-000000000004",
+    "unidade_id": "22222222-2222-2222-2222-222222222222",
+    "codigo_id": "CUPOM10RESGATE"
+}

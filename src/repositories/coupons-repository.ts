@@ -21,6 +21,13 @@ export const findAllCoupons = async () => {
     );
 }
 
+export const findPrivateCouponsByUserIdAndCouponId = async (usuario_id: string, cupom_id: string) => {
+    return await pool.query(
+        "SELECT * FROM cupons_clientes WHERE usuario_id = $1 AND cupom_id = $2",
+        [usuario_id, cupom_id]
+    );
+}
+
 export const createCoupon = async (cupom: Coupon) => {
     return await pool.query(
         "INSERT INTO cupons (id, unidade_id, codigo, nome, descricao, publico, tipo, valor, valor_minimo_pedido, inicia_em, expira_em, max_usos) " +

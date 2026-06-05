@@ -10,7 +10,7 @@ import * as OrderController from "./controllers/orders-controller";
 import * as InventoryController from "./controllers/inventories-controller";
 import * as PaymentController from "./controllers/payments-controller";
 import * as PaymentMockController from "./controllers/payments-mock-controller";
-import * as CuponController from "./controllers/coupons-controller";
+import * as CouponController from "./controllers/coupons-controller";
 
 const router = Router();
 
@@ -61,15 +61,15 @@ router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "mana
 
 router.get("/pagamento/log/:id", PaymentController.getPaymentLog);
 
+router.get("/cupons/:id", authMiddleware, roleMiddleware(["admin"]), CouponController.getCoupons);
+router.post("/cupons", authMiddleware, roleMiddleware(["admin"]), CouponController.createCoupon);
+router.post("/cupons/private", authMiddleware, roleMiddleware(["admin"]), CouponController.createPrivateCoupon);
+router.post("/cupons/resgate", authMiddleware, roleMiddleware(["admin", "cliente"]), CouponController.redeemCoupon);
 
-router.get("/cupons/:id", authMiddleware, roleMiddleware(["admin"]), CuponController.getCoupons);
-router.post("/cupons", authMiddleware, roleMiddleware(["admin"]), CuponController.createCoupon);
-router.post("/cupons/private", authMiddleware, roleMiddleware(["admin"]), CuponController.createPrivateCoupon);
-
-
-router.get("/cupon", CuponController.getCoupons);
-router.post("/cupon", CuponController.createCoupon);
-router.post("/cupon/private", CuponController.createPrivateCoupon);
+router.get("/cupon", CouponController.getCoupons);
+router.post("/cupon", CouponController.createCoupon);
+router.post("/cupon/private", CouponController.createPrivateCoupon);
+router.post("/cupon/resgate", CouponController.redeemCoupon);
 
 
 router.get("/financeiro", authMiddleware, roleMiddleware(["admin", "manager"]), FinanceController.getFinance);
