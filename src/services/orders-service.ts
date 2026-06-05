@@ -65,7 +65,7 @@ export const getAllOrderItemsByOrderIdService = async (order_id: string) => {
                 "Erro interno do servidor",
                 "/pedidos/itens/:id"
             )
-        };
+        }
     }
 }
 
@@ -111,7 +111,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
                     "Unidade não encontrada",
                     "/pedidos"
                 )
-            };
+            }
         }
 
         // Validate products exist and are active
@@ -125,7 +125,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
                         `Produto ${item.produto_id} não encontrado ou inativo`,
                         "/pedidos"
                     )
-                };
+                }
             }
 
             // Get recipe items for this product
@@ -203,7 +203,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
         return {
             status: 201,
             body: { order_id, message: "Pedido criado com sucesso" }
-        };
+        }
     } catch (error) {
         console.error("Erro ao criar pedido:", error);
         return {
@@ -213,7 +213,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
                 "Erro interno do servidor",
                 "/pedidos"
             )
-        };
+        }
     }
 }
 
@@ -227,7 +227,7 @@ export const calculateOrderTotal = async (items: { produto_id: string; quantidad
         }
     }
     return total;
-};
+}
 
 export const updateOrderStatusService = async (order_id: string, status: string) => {
     try {

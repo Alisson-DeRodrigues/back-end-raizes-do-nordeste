@@ -1,6 +1,6 @@
 import * as MenuRepository from "../repositories/menus-repository";
 import { createErrorMessage } from "../utils/error-message";
-import { MenuItem, RecipeItem } from "../controllers/menus-controller";
+import { MenuItem, RecipeItem } from "../models/menu-model";
 import * as UnitRepository from "../repositories/units-repository";
 import * as InventoryRepository from "../repositories/inventories-repository";
 
@@ -24,7 +24,7 @@ export const getMenuService = async (unidade_id: string) => {
         return {
             status: 200,
             body: menu
-        };
+        }
     } catch (error) {
         return {
             status: 500,
@@ -33,7 +33,7 @@ export const getMenuService = async (unidade_id: string) => {
                 "Erro interno do servidor",
                 "/cardapio/:id"
             )
-        };
+        }
     }
 }
 
@@ -57,7 +57,7 @@ export const getRecipeByProductIdService = async (id: string) => {
         return {
             status: 200,
             body: recipe
-        };
+        }
     } catch (error) {
         return {
             status: 500,
@@ -66,7 +66,7 @@ export const getRecipeByProductIdService = async (id: string) => {
                 "Erro interno do servidor",
                 "/cardapio/recipe/:id"
             )
-        };
+        }
     }
 }
 
@@ -88,7 +88,7 @@ export const createMenuItemService = async (menuItem: MenuItem) => {
                     "Unidade não encontrada",
                     "/cardapio"
                 )
-            };
+            }
         }
 
         if (menuItem.id) {
@@ -101,7 +101,7 @@ export const createMenuItemService = async (menuItem: MenuItem) => {
                         "Item de cardápio já existe",
                         "/cardapio"
                     )
-                };
+                }
             }
         }
 
@@ -111,7 +111,7 @@ export const createMenuItemService = async (menuItem: MenuItem) => {
         return {
             status: 201,
             body: result.rows[0]
-        };
+        }
     } catch (error) {
         console.log(error)
         return {
@@ -121,7 +121,7 @@ export const createMenuItemService = async (menuItem: MenuItem) => {
                 "Erro interno do servidor",
                 "/cardapio"
             )
-        };
+        }
     }
 }
 
@@ -137,7 +137,7 @@ export const createRecipeItemService = async (recipeItem: RecipeItem) => {
                     "Item de cardápio não encontrado",
                     "/cardapio/recipe"
                 )
-            };
+            }
         }
 
         const inventoryResult = await InventoryRepository.findItemByItemId(recipeItem.estoque_item_id);
@@ -150,7 +150,7 @@ export const createRecipeItemService = async (recipeItem: RecipeItem) => {
                     "Item de estoque não encontrado",
                     "/cardapio/recipe"
                 )
-            };
+            }
         }
 
         if (recipeItem.id) {
@@ -163,7 +163,7 @@ export const createRecipeItemService = async (recipeItem: RecipeItem) => {
                         "ID de item de receita já existe",
                         "/cardapio/recipe"
                     )
-                };
+                }
             }
         }
 
@@ -172,7 +172,7 @@ export const createRecipeItemService = async (recipeItem: RecipeItem) => {
         return {
             status: 201,
             body: result.rows[0]
-        };
+        }
     } catch (error) {
         console.log(error)
         return {
@@ -182,6 +182,6 @@ export const createRecipeItemService = async (recipeItem: RecipeItem) => {
                 "Erro interno do servidor",
                 "/cardapio/recipe"
             )
-        };
+        }
     }
 }

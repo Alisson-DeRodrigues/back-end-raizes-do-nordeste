@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as InventoryService from "../services/inventories-service";
+import { InventoryItem } from "../models/inventory-model";
 
 export const getInventoryItems = async (req: Request, res: Response) => {
     const unidade_id = req.params.id as string;
@@ -20,7 +21,7 @@ export const updateInventoryItem = async (req: Request, res: Response) => {
 export const createInventoryItem = async (req: Request, res: Response) => {
     const { unidade_id, nome, unidade_de_medida, estoque_minimo } = req.body;
     
-    const item: InventoryService.InventoryItem = {
+    const item: InventoryItem = {
         unidade_id,
         nome,
         unidade_de_medida,

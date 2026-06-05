@@ -4,7 +4,6 @@ import { getOrderByIdService } from "./orders-service";
 import { createErrorMessage } from "../utils/error-message";
 import { findUserByEmail, updateClientPoints } from "../repositories/users-repository"; // criar um service para isso depois
 import { registerClientPointTransactionService } from "./users-service";
-import { findCouponByCodeAndUnitId } from "../repositories/coupons-repository";
 
 export async function processPaymentService(order_id: string, cliente_email: string, cupom_codigo?: string) {
     try {
@@ -42,10 +41,10 @@ export async function processPaymentService(order_id: string, cliente_email: str
     ? await PaymentService.useCouponService(order.body.unidade_id, order.body.id, user.rows[0].id, cupom_codigo) 
     : null;
 
-// Busca .body.desconto se o status for 200
-let valor_desconto = (useCouponResponse && useCouponResponse.status === 200) 
-    ? (useCouponResponse.body as any).desconto 
-    : 0;
+        // Busca .body.desconto se o status for 200
+        let valor_desconto = (useCouponResponse && useCouponResponse.status === 200) 
+            ? (useCouponResponse.body as any).desconto 
+            : 0;
 
         const random = Math.random();
 

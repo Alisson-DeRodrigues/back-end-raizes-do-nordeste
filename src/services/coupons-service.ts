@@ -2,6 +2,7 @@ import { createErrorMessage } from "../utils/error-message";
 import { getUnitByIdService } from "./units-service";
 import * as CouponRepository from "../repositories/coupons-repository";
 import { findUserById, updateClientPoints } from "../repositories/users-repository";
+import { Coupon, PrivateCoupon, RedeemCoupon } from "../models/coupon-model";
 
 export const getAllCouponsService = async () => {
         const result = await CouponRepository.findAllCoupons();
@@ -17,22 +18,6 @@ export const getAllCouponsService = async () => {
             status: 200,
             body: result.rows[0]
         }
-};
-
-export interface Coupon {
-    id?: string;
-    unidade_id: string;
-
-    codigo: string;
-    nome: string;
-    descricao: string;
-    publico: boolean;
-    tipo: string; // porcentagem, valor_fixo
-    valor: number;
-    valor_minimo_pedido: number;
-    inicia_em: string | null;
-    expira_em: string;
-    max_usos: number;
 }
 
 export const createCouponService = async (cupom: Coupon) => {
@@ -48,7 +33,7 @@ export const createCouponService = async (cupom: Coupon) => {
                     "Unidade não encontrada para associar o cupom",
                     "/cupons"
                 )
-            };
+            }
         }
 
         if(codigo_existe.rows.length > 0) {
@@ -59,7 +44,7 @@ export const createCouponService = async (cupom: Coupon) => {
                     "Cupom já existe para esta unidade",
                     "/cupons"
                 )
-            };
+            }
         }
 
         const result = await CouponRepository.createCoupon(cupom);
@@ -67,7 +52,7 @@ export const createCouponService = async (cupom: Coupon) => {
         return {
             status: 201,
             body: { message: "Cupom criado com sucesso", cupom: result.rows[0] }
-        };
+        }
 
     } catch (error) {
         console.error("Error creating coupon:", error);
@@ -78,42 +63,35 @@ export const createCouponService = async (cupom: Coupon) => {
                 "Erro interno do servidor",
                 "/cupons"
             )
-        };
+        }
     }
 }
 
-export interface PrivateCoupon {
-    id?: string;
-    unidade_id: string;
-    usuario_id: string;
-    cupom_id: string;
-}
 export const createPrivateCouponService = async (cupom: PrivateCoupon) => {
     try {
         const usuario_existe = await findUserById(cupom.usuario_id);
         const cupom_existe = await CouponRepository.findCouponByCouponIdAndUnitId(cupom.cupom_id, cupom.unidade_id);
-        console.log(cupom_existe);
 
         if(usuario_existe.rows.length === 0) {
-                return {
-                    status: 404,
-                    body: createErrorMessage(
-                        "USER_NOT_FOUND",
-                        "Usuário não encontrado",
-                        "/cupons/private"
-                    )
-                };
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "USER_NOT_FOUND",
+                    "Usuário não encontrado",
+                    "/cupons/private"
+                )
+            }
         } 
 
         if (cupom_existe.rows.length === 0) {
-                return {
-                    status: 404,
-                    body: createErrorMessage(
-                        "COUPON_NOT_FOUND",
-                        "Cupom não encontrado",
-                        "/cupons/private"
-                    )
-                };
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "COUPON_NOT_FOUND",
+                    "Cupom não encontrado",
+                    "/cupons/private"
+                )
+            }
         }
 
         const result = await CouponRepository.createPrivateCoupon(cupom);
@@ -121,7 +99,7 @@ export const createPrivateCouponService = async (cupom: PrivateCoupon) => {
         return {
             status: 201,
             body: { message: "Cupom criado com sucesso", cupom: result.rows[0] }
-        };
+        }
 
     } catch(error){
         console.log(error);
@@ -132,14 +110,8 @@ export const createPrivateCouponService = async (cupom: PrivateCoupon) => {
                 "Erro interno do servidor",
                 "/cupons/private"
             )
-        };       
+        }  
     }
-}
-
-export interface RedeemCoupon {
-    usuario_id: string;
-    unidade_id: string;
-    codigo_id: string;
 }
 
 export const redeemCouponService = async (cupom: RedeemCoupon) => {
@@ -155,7 +127,7 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
                     "Usuário não encontrado",
                     "/cupons/resgate"
                 )
-            };
+            }
         } 
 
         if (cupom_existe.rows.length === 0) {
@@ -166,7 +138,7 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
                     "Cupom não encontrado",
                     "/cupons/resgate"
                 )
-            };
+            }
         }
 
         if (usuario_existe.rows[0].pontos < cupom_existe.rows[0].valor) {
@@ -177,7 +149,7 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
                     "Pontos insuficientes para resgatar este cupom",
                     "/cupons/resgate"
                 )
-            };
+            }
         }
 
         if (usuario_existe.rows[0].pontos >= cupom_existe.rows[0].valor){
@@ -191,7 +163,7 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
             return {
                 status: 201,
                 body: { message: "Cupom resgatado com sucesso", usuario: usuario_existe.rows[0], cupom: cupom_existe.rows[0] }
-            };
+            }
         }
 
         return {
@@ -212,6 +184,6 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
                 "Erro interno do servidor",
                 "/cupons/resgate"
             )
-        };       
+        }   
     }
 }

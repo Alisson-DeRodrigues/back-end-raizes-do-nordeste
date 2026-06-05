@@ -1,5 +1,5 @@
 import { pool } from "../database";
-import { Coupon, PrivateCoupon } from "../services/coupons-service";
+import { Coupon, PrivateCoupon } from "../models/coupon-model";
 
 export const findCouponByCodeAndUnitId = async (cupom_codigo: string, unidade_id: string) => {
     return await pool.query(

@@ -1,7 +1,7 @@
+import { ClientPointTransaction } from "../models/user-model";
 import * as UserRepository from "../repositories/users-repository";
 import { createErrorMessage } from "../utils/error-message";
 import { comparePassword, generateToken, hashPassword } from "./auth-service";
-
 
 export const userLoginService = async (email: string, password: string) => {
     try {
@@ -44,7 +44,7 @@ export const userLoginService = async (email: string, password: string) => {
                 message: "Login realizado com sucesso",
                 token
             }
-        };
+        }
     
       } catch (error) {
         return {
@@ -95,7 +95,7 @@ export const registerClientService = async (unidade_id: number, name: string, em
         return {
             status: 201,
             body: { message: "Cliente registrado com sucesso" }
-        };
+        }
     
       } catch (error) {
         console.error(error);
@@ -192,15 +192,6 @@ export const updateClientPoints = async (usuario_id: string, pontos: number) => 
 }
 
 // registrar transações de pontos de cleinte
-
-export interface ClientPointTransaction {
-    id?: string;
-    unidade_id: string;
-    usuario_id: string;
-    pontos: number;
-    tipo_transacao: string; // ganho, resgate, expirado
-    descricao: string;
-}
 
 export const registerClientPointTransactionService = async (transacao: ClientPointTransaction) => {
     return await UserRepository.registerClientPointTransaction(transacao);

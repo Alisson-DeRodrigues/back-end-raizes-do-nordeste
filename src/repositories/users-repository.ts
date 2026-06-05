@@ -1,13 +1,11 @@
 import { pool } from "../database";
-import { ClientPointTransaction } from "../services/users-service";
+import { ClientPointTransaction } from "../models/user-model";
 
 export const findUserByEmail = async (email: string) => {
-  const result = await pool.query(
+  return await pool.query(
     "SELECT * FROM usuarios WHERE email = $1",
     [email]
   );
-
-  return result;
 }
 
 export const findUserById = async (id: string) => {

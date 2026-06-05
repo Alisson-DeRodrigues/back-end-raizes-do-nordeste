@@ -1,27 +1,11 @@
 import { Request, Response } from "express";
 import * as MenuService from "../services/menus-service"
-
-
-export interface MenuItem {
-    id?: string;
-    unidade_id: string;
-    nome: string;
-    descricao: string;
-    ativo: boolean;
-    preco: number;
-}
-
-export interface RecipeItem {
-    id?: string;
-    produto_cardapio_id: string;
-    estoque_item_id: string;
-    quantidade_usada: number;
-}
+import { MenuItem, RecipeItem } from "../models/menu-model";
 
 export const getMenuByUnitId = async (req: Request, res: Response) => {
-    const unitId = req.params.id as string;
+    const unidade_id = req.params.id as string;
 
-    let httpResponse = await MenuService.getMenuService(unitId);
+    let httpResponse = await MenuService.getMenuService(unidade_id);
 
     return res.status(httpResponse.status).json(httpResponse.body);
 }
@@ -43,9 +27,9 @@ export const createRecipeItem = async (req: Request, res: Response) => {
 }
 
 export const getRecipeByProductId = async (req: Request, res: Response) => {
-    const productId = req.params.id as string;
+    const product_id = req.params.id as string;
 
-    let httpResponse = await MenuService.getRecipeByProductIdService(productId);
+    let httpResponse = await MenuService.getRecipeByProductIdService(product_id);
 
     return res.status(httpResponse.status).json(httpResponse.body);
 }

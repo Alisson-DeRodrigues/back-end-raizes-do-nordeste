@@ -20,7 +20,7 @@ export const getAllUnitsService = async () => {
         return {
             status: 200,
             body: result.rows
-        };
+        }
 
       } catch (err) {
         console.error(err);

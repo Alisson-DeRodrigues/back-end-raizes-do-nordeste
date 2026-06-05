@@ -2,21 +2,17 @@ import { pool } from "../database";
 import { Payment } from "../services/payments-service";
 
 export const findPaymentsByOrderId = async (id: string) => {
-  const result = await pool.query(
+  return await pool.query(
     "SELECT * FROM pagamentos_pedidos WHERE pedido_id = $1 ORDER BY created_at DESC",
     [id]
   );
-
-  return result;
 }
 
 export const findPaymentsByUnitId = async (unidade_id: string) => {
-    const result = await pool.query(
+    return await pool.query(
         "SELECT * FROM pagamentos_pedidos WHERE unidade_id = $1 ORDER BY created_at DESC",
         [unidade_id]
     );
-
-    return result;
 }
 
 export const insertPaymentPaid = async (payment: Payment) => {
@@ -44,9 +40,8 @@ export const insertPaymentCanceled = async (payment: Payment) => {
 }
 
 export const createOrderPayment = async (unidade_id: string, pedido_id: string, forma_pagamento: string, valor: number, status: string) => {
-    const result = await pool.query(
+    return await pool.query(
         "INSERT INTO pagamentos_pedidos (unidade_id, pedido_id, metodo_pagamento, valor, status) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
         [unidade_id, pedido_id, forma_pagamento, valor, status]
     );
-    return result;
-};
+}

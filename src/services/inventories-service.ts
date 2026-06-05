@@ -1,6 +1,7 @@
 import { createErrorMessage } from "../utils/error-message";
 import * as InventoryRepository from "../repositories/inventories-repository";
 import * as UnitService from "./units-service";
+import { InventoryItem } from "../models/inventory-model";
 
 export const getInventoryItemsByUnitIdService = async (unidade_id: string) => {
     try {
@@ -93,14 +94,6 @@ export const updateInventoryItemService = async (unidade_id: string, item_id: st
             )
         }
     }
-}
-
-export interface InventoryItem {
-    id?: string;
-    unidade_id: string;
-    nome: string;
-    unidade_de_medida: string;
-    estoque_minimo: number;
 }
 
 export const createInventoryItemService = async (item: InventoryItem) => {
