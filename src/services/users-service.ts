@@ -127,7 +127,7 @@ export const getLoginService = async (usuario_id: number | undefined, usuario_ro
             status: 200,
             body: {
                 message: "Perfil do usuário",
-                userId: usuario_id,
+                user_id: usuario_id,
                 role: usuario_role
             }
         }

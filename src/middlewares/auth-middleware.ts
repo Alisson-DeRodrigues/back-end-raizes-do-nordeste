@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { createErrorMessage } from "../utils/error-message";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -17,9 +18,16 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
 
     // Verifica se enviou token
     if (!authHeader) {
-      return res.status(401).json({
-        error: "Token não fornecido"
-      });
+      let httpResponse = {
+      status: 401,
+      body: createErrorMessage(
+        "UNAUTHORIZED",
+        "Usuário não autenticado",
+        req.path
+      )
+    }
+
+      return res.status(httpResponse.status).json(httpResponse.body);
     }
 
     // Formato esperado:
@@ -27,9 +35,16 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
     const [, token] = authHeader.split(" ");
 
     if (!token) {
-      return res.status(401).json({
-        error: "Token inválido"
-      });
+      let httpResponse = {
+        status: 401,
+        body: createErrorMessage(
+          "UNAUTHORIZED",
+          "Token não fornecido",
+          req.path
+        )
+      }
+      
+      return res.status(httpResponse.status).json(httpResponse.body);
     }
 
     // Verifica token
@@ -47,8 +62,14 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
     next();
 
   } catch (err) {
-    return res.status(401).json({
-      error: "Token inválido ou expirado"
-    });
+    let httpResponse = {
+      status: 401,
+      body: createErrorMessage(
+        "UNAUTHORIZED",
+        "Token inválido ou expirado",
+        req.path
+      )
+    };
+    return res.status(httpResponse.status).json(httpResponse.body);
   }
 }

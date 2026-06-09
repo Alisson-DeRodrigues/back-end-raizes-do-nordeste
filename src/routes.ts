@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { authMiddleware } from "./middleware/auth-middleware";
-import { roleMiddleware } from "./middleware/role-middleware";
+import { authMiddleware } from "./middlewares/auth-middleware";
+import { roleMiddleware } from "./middlewares/role-middleware";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocs from "./swagger.json"
 
 import * as UserController from "./controllers/users-controller";
-import * as FinanceController from "./controllers/finance-controller";
 import * as UnitControler from "./controllers/units-controller";
 import * as MenuController from "./controllers/menus-controller";
 import * as OrderController from "./controllers/orders-controller";
@@ -13,6 +14,8 @@ import * as PaymentMockController from "./controllers/payments-mock-controller";
 import * as CouponController from "./controllers/coupons-controller";
 
 const router = Router();
+
+router.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 router.get("/login", authMiddleware, UserController.getLogin);
 router.post("/login", UserController.postLogin);
@@ -70,8 +73,5 @@ router.get("/cupon", CouponController.getCoupons);
 router.post("/cupon", CouponController.createCoupon);
 router.post("/cupon/private", CouponController.createPrivateCoupon);
 router.post("/cupon/resgate", CouponController.redeemCoupon);
-
-
-router.get("/financeiro", authMiddleware, roleMiddleware(["admin", "manager"]), FinanceController.getFinance);
 
 export default router;

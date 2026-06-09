@@ -1,0 +1,167 @@
+{
+    "openapi": "3.0.0",
+    "info":{
+        "title": "API de Raízes do Nordeste",
+        "version": "1.0.0",
+        "description": "API de Raízes do Nordeste com cadastro de clientes, login, manipulação de estoque, cardápio da unidade e vendas.",
+        "termsOfService": "http://example.com/terms/",
+        "contact": {
+            "name": "Suporte Raízes do Nordeste",
+            "email": "suporte@raizesdonordeste.com"
+        }
+    },
+    "paths": {
+        "/login": {
+            "get": {
+                "summary": "Obter informações do login",
+                "description": "Obtem informações do login do usuário autenticado.",
+                "tags": ["Usuários"],
+                "servers": [{"bearerAuth": []}],
+                "responses": {
+                    "401": {
+                        "description": "UNAUTHORIZED"
+                    },
+                    "500": {
+                        "description": "INTERNAL_SERVER_ERROR"
+                    },
+                    "200": {
+                        "description": "Login bem-sucedido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                },
+                                "example": {
+                                    "message": "Perfil do usuário",
+                                    "user_id": "ba000000-0000-0000-0000-000000000001",
+                                    "role": "admin"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "summary": "Realizar login",
+                "description": "Endpoint para realizar login e obter um token de autenticação.",
+                "tags": ["Usuários"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            },
+                            "example": {
+                                "email": "admin@restaurante.com",
+                                "password": "teste"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login bem-sucedido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida"
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas"
+                    }
+                }
+            }
+        },
+        "/estoques/:id": {
+            "get": {
+                "summary": "Obter estoque por ID",
+                "description": "Obtem informações do estoque por ID.",
+                "tags": ["Estoques"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "ID do estoque a ser obtido"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "UNAUTHORIZED"
+                    },
+                    "404": {
+                        "description": "NOT_FOUND"
+                    },
+                    "500": {
+                        "description": "INTERNAL_SERVER_ERROR"
+                    },
+                    "200": {
+                        "description": "Estoque encontrado"
+                        }
+                    }
+                }
+        }
+    },
+    "components": {
+        "schemas": {
+            "GetLoginResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LoginRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LoginResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "token": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+        "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+        }
+    }
+    }
+}
