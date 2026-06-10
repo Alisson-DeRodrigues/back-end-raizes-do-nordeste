@@ -17,9 +17,10 @@ const router = Router();
 
 router.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+router.post("/register", UserController.postClient);
+
 router.get("/login", authMiddleware, UserController.getLogin);
 router.post("/login", UserController.postLogin);
-router.post("/register", UserController.postClient);
 router.post("/clientes/fidelidade", authMiddleware, roleMiddleware(["cliente"]), UserController.updateClientFidelityPoints);
 
 

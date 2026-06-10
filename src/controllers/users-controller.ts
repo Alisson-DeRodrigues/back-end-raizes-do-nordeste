@@ -16,6 +16,10 @@ export const getLogin = async (req: AuthRequest, res: Response) => {
         return res.status(500).json({
             error: "INTERNAL_SERVER_ERROR",
             message: "Erro interno do servidor",
+            details: [],
+            timestamp: new Date().toISOString(),
+            path: req.path,
+            requestId: null
         });
     }
 }

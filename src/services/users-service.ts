@@ -1,5 +1,6 @@
 import { ClientPointTransaction } from "../models/user-model";
 import * as UserRepository from "../repositories/users-repository";
+import * as UnitRepository from "../repositories/units-repository";
 import { createErrorMessage } from "../utils/error-message";
 import { comparePassword, generateToken, hashPassword } from "./auth-service";
 
@@ -9,9 +10,9 @@ export const userLoginService = async (email: string, password: string) => {
     
         if (result.rows.length === 0) {
             return {
-                status: 401,
+                status: 404,
                 body: createErrorMessage(
-                    "LOGIN_UNAUTHORIZED",
+                    "USER_NOT_FOUND",
                     "Usuário não encontrado",
                     "/login",
                     [{ field: "email", issue: "Email não encontrado no sistema" }]
@@ -29,9 +30,8 @@ export const userLoginService = async (email: string, password: string) => {
                 status: 401,
                 body: createErrorMessage(
                     "LOGIN_UNAUTHORIZED",
-                    "Usuário ou senha inválidos",
+                    "Usuário ou senha incorretos",
                     "/login",
-                    [{ field: "password", issue: "Senha incorreta" }]
                 )
             }
         }
@@ -59,13 +59,26 @@ export const userLoginService = async (email: string, password: string) => {
       }
 }
 
-export const registerClientService = async (unidade_id: number, name: string, email: string, password: string, ativo_programa_fidelidade: boolean) => {
+export const registerClientService = async (unidade_id: any, name: string, email: string, password: string, ativo_programa_fidelidade: boolean) => {
     try {
+        const existingUnit = await UnitRepository.findUnitById(unidade_id);
         const existingUser = await UserRepository.findUserByEmail(email);
     
+        if (existingUnit.rows.length === 0) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "UNIT_VALIDATION_ERROR",
+                    "Unidade não encontrada",
+                    "/register",
+                    [{ field: "unidade_id", issue: "Unidade não existe" }]
+                )
+            }
+        }
+
         if (existingUser.rows.length > 0) {
             return {
-                status: 400,
+                status: 409,
                 body: createErrorMessage(
                     "USER_VALIDATION_ERROR",
                     "Usuário já existe",
@@ -116,7 +129,7 @@ export const getLoginService = async (usuario_id: number | undefined, usuario_ro
             return {
                 status: 401,
                 body: createErrorMessage(
-                    "UNAUTHORIZED",
+                    "LOGIN_UNAUTHORIZED",
                     "Usuário não autenticado",
                     "/login"
                 )

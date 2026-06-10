@@ -11,50 +11,136 @@
         }
     },
     "paths": {
-        "/login": {
-            "get": {
-                "summary": "Obter informações do login",
-                "description": "Obtem informações do login do usuário autenticado.",
-                "tags": ["Usuários"],
-                "servers": [{"bearerAuth": []}],
-                "responses": {
-                    "401": {
-                        "description": "UNAUTHORIZED"
-                    },
-                    "500": {
-                        "description": "INTERNAL_SERVER_ERROR"
-                    },
-                    "200": {
-                        "description": "Login bem-sucedido",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/LoginResponse"
-                                },
-                                "example": {
-                                    "message": "Perfil do usuário",
-                                    "user_id": "ba000000-0000-0000-0000-000000000001",
-                                    "role": "admin"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
+        "/register": {
             "post": {
-                "summary": "Realizar login",
-                "description": "Endpoint para realizar login e obter um token de autenticação.",
-                "tags": ["Usuários"],
+                "summary": "Registrar novo cliente",
+                "description": "Registra um novo cliente no sistema.",
+                "tags": ["Register"],
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/LoginRequest"
+                                "type": "object",
+                                "properties": {
+                                    "unidade_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "ativo_programa_fidelidade": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": ["unidade_id", "name", "email", "password", "ativo_programa_fidelidade"]
+                            },
+                            "example": {
+                                "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                "name": "Cliente Teste",
+                                "email": "cliente@teste.com",
+                                "password": "senha123",
+                                "ativo_programa_fidelidade": true
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cliente registrado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Cliente registrado com sucesso"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Unidade não encontrada",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "UNIT_NOT_FOUND",
+                                    "message": "Unidade não encontrada",
+                                    "details": [
+                                        {
+                                            "field": "unidade_id",
+                                            "issue": "Unidade não existe"
+                                        }
+                                    ],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/register",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Usuário já existe",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "USER_VALIDATION_ERROR",
+                                    "message": "Usuário já existe",
+                                    "details": [
+                                        {
+                                            "field": "email",
+                                            "issue": "Email já cadastrado"
+                                        }
+                                    ],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/register",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/register",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Realizar login",
+                "description": "Endpoint para realizar login e obter um token de autenticação.",
+                "tags": ["Users"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["email", "password"]
                             },
                             "example": {
                                 "email": "admin@restaurante.com",
@@ -65,25 +151,206 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Login bem-sucedido",
+                        "description": "Login realizado com sucesso",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/LoginResponse"
+                                "example": {
+                                    "message": "Login realizado com sucesso",
+                                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYmEwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAxIiwiaWF0IjoxNjEzNzQyMzQ1LCJleHAiOjE2MTM3NDU5NDV9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
                                 }
                             }
                         }
                     },
-                    "400": {
-                        "description": "Requisição inválida"
+                    "401": {
+                        "description": "Login não autorizado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "LOGIN_UNAUTHORIZED",
+                                    "message": "Usuário ou senha incorretos",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/login",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "USER_NOT_FOUND",
+                                    "message": "Usuário não encontrado",
+                                    "details": [
+                                        {
+                                            "field": "email",
+                                            "issue": "Email não encontrado no sistema"
+                                        }
+                                    ],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/login",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/login",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Obter informações do login",
+                "description": "Obtem informações do login do usuário autenticado.",
+                "tags": ["Users"],
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "Login bem-sucedido",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Perfil do usuário",
+                                    "user_id": "ba000000-0000-0000-0000-000000000001",
+                                    "role": "admin"
+                                }
+                            }
+                        }
                     },
                     "401": {
-                        "description": "Credenciais inválidas"
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/login",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/login",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/login",
+                                    "requestId": null
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "/estoques/:id": {
+        "/clientes/fidelidade": {
+            "post": {
+                "summary": "Alterar adesão ao programa de fidelidade",
+                "description": "Altera a adesão do cliente logado ao programa de fidelidade.",
+                "tags": ["Users"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "ativo_programa_fidelidade": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": ["ativo_programa_fidelidade"]
+                            },
+                            "example": {
+                                "ativo_programa_fidelidade": true
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pontos de fidelidade atualizados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Pontos de fidelidade atualizados com sucesso"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/clientes/fidelidade",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/clientes/fidelidade",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        },
+        "/estoques/{id}": {
             "get": {
                 "summary": "Obter estoque por ID",
                 "description": "Obtem informações do estoque por ID.",
