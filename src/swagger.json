@@ -2354,6 +2354,302 @@
                     }
                 }
             }
+        },
+        "/pagamentos": {
+            "post": {
+                "summary": "Realizar pagamento de um pedido",
+                "description": "Realiza o pagamento de um pedido.",
+                "tags": ["Payments"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "order_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "cliente_email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "cupon_codigo": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["order_id", "cliente_email"]
+                            },
+                            "example": {
+                                "order_id": "0e5c1f33-9f95-4346-aa11-13218a587250",
+                                "cliente_email": "cliente@email.com",
+                                "cupom_codigo": "CUPOM10"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pagamento realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Pagamento aprovado"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Pagamento recusado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "PAYMENT_REFUSED",
+                                    "message": "Pagamento recusado",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pagamentos",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pagamentos",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Recurso não encontrado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "order_not_found": {
+                                        "summary": "Pedido ou pagamento não encontrado",
+                                        "value": {
+                                            "error": "ORDER_OR_PAYMENT_NOT_FOUND",
+                                            "message": "Pedido ou pagamento não encontrado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "user_not_found": {
+                                        "summary": "Usuário não encontrado",
+                                        "value": {
+                                            "error": "USER_NOT_FOUND",
+                                            "message": "Usuário não encontrado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor ou gateway de pagamento",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "internal_server_error": {
+                                        "summary": "Erro interno do servidor",
+                                        "value": {
+                                            "error": "INTERNAL_SERVER_ERROR",
+                                            "message": "Erro interno do servidor",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "payment_pending": {
+                                        "summary": "Pagamento pendente",
+                                        "value": {
+                                            "error": "PAYMENT_PENDING",
+                                            "message": "Pagamento pendente, tente novamente mais tarde",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pagamentos/log/{id}": {
+            "get": {
+                "summary": "Obter log de pagamento",
+                "description": "Obtém o log de um pagamento por ID da unidade.",
+                "tags": ["Payments"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "ID da unidade"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Log de pagamento retornado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": [
+                                    {
+                                        "id": "7be84012-dcc6-4a03-ae59-7ac41ee6967c",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "pedido_id": "f0000000-0000-0000-0000-000000000001",
+                                        "metodo_pagamento": "pix",
+                                        "valor": "64.40",
+                                        "status": "pago",
+                                        "created_at": "2026-05-27T14:27:19.679Z"
+                                    },
+                                    {
+                                        "id": "33811183-1f97-4697-884e-57dfdcdc76d7",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "pedido_id": "d8be425c-da47-4fe9-9ddd-2159bdc60225",
+                                        "metodo_pagamento": "dinheiro",
+                                        "valor": "165.80",
+                                        "status": "pendente",
+                                        "created_at": "2026-05-22T14:48:16.949Z"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos/log/:id",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos/log/:id",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pagamentos/log/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Log de pagamento não encontrado para a unidade",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "PAYMENT_LOG_NOT_FOUND",
+                                    "message": "Nenhum registro de pagamento encontrado para a unidade",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pagamentos/log/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pagamentos/log/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
