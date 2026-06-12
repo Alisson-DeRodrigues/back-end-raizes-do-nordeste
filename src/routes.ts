@@ -32,20 +32,11 @@ router.post("/estoques/update", authMiddleware, roleMiddleware(["admin", "cozinh
 router.post("/estoques/new", authMiddleware, roleMiddleware(["admin", "gerente"]), InventoryController.createInventoryItem);
 router.get("/estoques/log/:id", authMiddleware, roleMiddleware(["admin", "gerente"]), InventoryController.getInventoryLog);
 
-router.post("/estoque", InventoryController.updateInventoryItem);
-router.post("/estoque/new", InventoryController.createInventoryItem);
-router.get("/estoque/log/:id", InventoryController.getInventoryLog);
-
 
 router.get("/cardapio/:id", authMiddleware, roleMiddleware(["*"]), MenuController.getMenuByUnitId);
 router.post("/cardapio", authMiddleware, roleMiddleware(["admin"]), MenuController.createMenuItem);
 router.post("/cardapio/recipe", authMiddleware, roleMiddleware(["admin"]), MenuController.createRecipeItem);
 router.get("/cardapio/recipe/:id", authMiddleware, roleMiddleware(["admin"]), MenuController.getRecipeByProductId);
-
-router.get("/cardapios/:id", MenuController.getMenuByUnitId);
-router.post("/cardapios", MenuController.createMenuItem);
-router.post("/cardapios/recipe", MenuController.createRecipeItem);
-router.get("/cardapios/recipe/:id", MenuController.getRecipeByProductId);
 
 
 router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrders);
@@ -54,25 +45,15 @@ router.post("/pedidos", authMiddleware, roleMiddleware(["admin", "atendente", "c
 router.put("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente"]), OrderController.updateOrderStatus);
 router.put("/pedidos/cancelar/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cliente"]), OrderController.cancelOrder);
 
-router.put("/pedido/:id", OrderController.updateOrderStatus);
-router.post("/pedido", OrderController.createOrder);
-router.put("/pedido/cancelar/:id", OrderController.cancelOrder);
-
 
 router.post("/pagamentos", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentMockController.processPaymentMock);
-router.post("/pagamento", PaymentMockController.processPaymentMock);
 router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "gerente"]), PaymentController.getPaymentLog);
 
-router.get("/pagamento/log/:id", PaymentController.getPaymentLog);
 
 router.get("/cupons/:id", authMiddleware, roleMiddleware(["admin"]), CouponController.getCoupons);
 router.post("/cupons", authMiddleware, roleMiddleware(["admin"]), CouponController.createCoupon);
 router.post("/cupons/private", authMiddleware, roleMiddleware(["admin"]), CouponController.createPrivateCoupon);
 router.post("/cupons/resgate", authMiddleware, roleMiddleware(["admin", "cliente"]), CouponController.redeemCoupon);
 
-router.get("/cupon", CouponController.getCoupons);
-router.post("/cupon", CouponController.createCoupon);
-router.post("/cupon/private", CouponController.createPrivateCoupon);
-router.post("/cupon/resgate", CouponController.redeemCoupon);
 
 export default router;

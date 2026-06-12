@@ -45,7 +45,7 @@ export const getRecipeByProductIdService = async (id: string) => {
                 status: 404,
                 body: createErrorMessage(
                     "RECIPE_NOT_FOUND",
-                    "Receita não encontrada para o item de cardápio",
+                    "Receita não encontrada para o produto do cardápio",
                     "/cardapio/recipe/:id",
                 )
             }
@@ -134,7 +134,7 @@ export const createRecipeItemService = async (recipeItem: RecipeItem) => {
                 status: 404,
                 body: createErrorMessage(
                     "MENU_ITEM_NOT_FOUND",
-                    "Item de cardápio não encontrado",
+                    "Produto do cardápio não encontrado",
                     "/cardapio/recipe"
                 )
             }

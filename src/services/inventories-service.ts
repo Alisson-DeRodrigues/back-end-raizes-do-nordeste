@@ -55,7 +55,7 @@ export const updateInventoryItemService = async (unidade_id: string, item_id: st
                 body: createErrorMessage(
                     "INVENTORY_ITEM_NOT_FOUND",
                     `Item de estoque ${item_id} não encontrado`,
-                    "/estoques/:id"
+                    "/estoques/update"
                 )
             }
         }
@@ -70,9 +70,15 @@ export const updateInventoryItemService = async (unidade_id: string, item_id: st
             return {
                 status: 400,
                 body: createErrorMessage(
-                    "INVALID_ACTION",
-                    "Ação inválida. Use 'adicionar' ou 'remover'.",
-                    "/estoques/:id"
+                    "BAD_REQUEST",
+                    "Ação inválida.",
+                    "/estoques/update",
+                     [
+                        {
+                            "field": "acao",
+                            "issue": "Valor deve ser 'adicionar' ou 'remover'"
+                        }
+                    ],
                 )
             }
         }
@@ -90,7 +96,7 @@ export const updateInventoryItemService = async (unidade_id: string, item_id: st
             body: createErrorMessage(
                 "INTERNAL_SERVER_ERROR",
                 "Erro interno do servidor",
-                "/estoques/:id"
+                "/estoques/update"
             )
         }
     }

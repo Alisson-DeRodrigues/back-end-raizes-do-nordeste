@@ -10,7 +10,7 @@ export const getAllUnitsService = async () => {
             return {
                 status: 404,
                 body: createErrorMessage(
-                    "UNIT_NOT_FOUND",
+                    "UNITS_NOT_FOUND",
                     "Nenhuma unidade encontrada",
                     "/unidades",
                 )

@@ -1,5 +1,6 @@
 import { Response, NextFunction } from "express";
 import { AuthRequest } from "./auth-middleware";
+import { createErrorMessage } from "../utils/error-message";
 
 export function roleMiddleware(allowedRoles: string[]) {
   return (
@@ -11,15 +12,29 @@ export function roleMiddleware(allowedRoles: string[]) {
     const userRole = req.user?.role;
 
     if (!userRole) {
-      return res.status(401).json({
-        error: "Não autenticado"
-      });
+      let httpResponse = {
+        status: 401,
+        body: createErrorMessage(
+          "UNAUTHORIZED",
+          "Usuário não autenticado",
+          req.path
+        )
+      }
+      
+      return res.status(httpResponse.status).json(httpResponse.body);
     }
 
     if (!allowedRoles.includes(userRole) && !allowedRoles.includes("*")) {
-      return res.status(403).json({
-        error: "Sem permissão"
-      });
+      let httpResponse = {
+        status: 403,
+        body: createErrorMessage(
+          "FORBIDDEN",
+          "Usuário sem permissão",
+          req.path
+        )
+      }
+
+      return res.status(httpResponse.status).json(httpResponse.body);
     }
 
     next();
