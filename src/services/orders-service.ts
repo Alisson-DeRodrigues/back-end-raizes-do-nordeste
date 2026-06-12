@@ -105,7 +105,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
         const unitResult = await UnitRepository.findUnitById(unidade_id);
         if (unitResult.rows.length === 0) {
             return {
-                status: 400,
+                status: 404,
                 body: createErrorMessage(
                     "UNIT_NOT_FOUND",
                     "Unidade não encontrada",
@@ -119,7 +119,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
             const productResult = await MenuRepository.findProductById(item.produto_id);
             if (productResult.rows.length === 0 || !productResult.rows[0].ativo) {
                 return {
-                    status: 400,
+                    status: 404,
                     body: createErrorMessage(
                         "PRODUCT_NOT_FOUND",
                         `Produto ${item.produto_id} não encontrado ou inativo`,
@@ -132,7 +132,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
             const recipeResult = await MenuRepository.findRecipeByProductId(item.produto_id);
             if (recipeResult.rows.length === 0) {
                 return {
-                    status: 400,
+                    status: 404,
                     body: createErrorMessage(
                         "RECIPE_NOT_FOUND",
                         `Receita não encontrada para o produto ${item.produto_id}`,
@@ -147,7 +147,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
                 
                 if (stockResult.rows.length === 0) {
                     return {
-                        status: 400,
+                        status: 404,
                         body: createErrorMessage(
                             "STOCK_ITEM_NOT_FOUND",
                             `Item de estoque ${recipeItem.estoque_item_id} não encontrado`,
@@ -161,7 +161,7 @@ export const createOrderService = async (unidade_id: string, orderData: { items:
 
                 if (availableQuantity < requiredQuantity) {
                     return {
-                        status: 400,
+                        status: 422,
                         body: createErrorMessage(
                             "INSUFFICIENT_STOCK",
                             `Quantidade insuficiente em estoque para o item ${recipeItem.estoque_item_id}. Disponível: ${availableQuantity}, Necessário: ${requiredQuantity}`,
@@ -290,7 +290,7 @@ export const cancelOrderService = async (order_id: string) => {
 
         if (order.status === "cancelado") {
             return {
-                status: 400,
+                status: 409,
                 body: createErrorMessage(
                     "ORDER_ALREADY_CANCELLED",
                     "Pedido já está cancelado",
@@ -301,7 +301,7 @@ export const cancelOrderService = async (order_id: string) => {
 
         if (order.status === "entregue") {
             return {
-                status: 400,
+                status: 409,
                 body: createErrorMessage(
                     "ORDER_ALREADY_DELIVERED",
                     "Pedido já foi entregue",

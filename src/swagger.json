@@ -281,7 +281,7 @@
             }
         },
         "/clientes/fidelidade": {
-            "post": {
+            "patch": {
                 "summary": "Alterar adesão ao programa de fidelidade",
                 "description": "Altera a adesão do cliente logado ao programa de fidelidade.",
                 "tags": ["Users"],
@@ -592,7 +592,7 @@
             }
         },
         "/estoques/update": {
-            "post": {
+            "patch": {
                 "summary": "Alterar quantidade de item no estoque",
                 "description": "Alterar a quantidade de um item no estoque",
                 "tags": ["Inventories"],
@@ -1662,6 +1662,691 @@
                                     "details": [],
                                     "timestamp": "2026-06-10T15:22:28.583Z",
                                     "path": "/cardapio/recipe/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pedidos/{id}": {
+            "get": {
+                "summary": "Retornar todos os pedidos de uma unidade",
+                "description": "Retorna uma lista de pedidos para a unidade especificada por ID.",
+                "tags": ["Orders"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "ID da unidade"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pedidos retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": [
+                                        {
+                                            "id": "fae84b65-1fa3-4416-b1d1-6485f5094aa7",
+                                            "total": "165.80",
+                                            "canal_pedido": "app",
+                                            "forma_pagamento": "dinheiro",
+                                            "status": "pronto",
+                                            "created_at": "2026-05-22T12:33:05.666Z"
+                                        },
+                                        {
+                                            "id": "f0000000-0000-0000-0000-000000000001",
+                                            "total": "64.40",
+                                            "canal_pedido": "balcão",
+                                            "forma_pagamento": "pix",
+                                            "status": "cozinha",
+                                            "created_at": "2026-05-15T09:11:02.416Z"
+                                        }
+                                ]
+                            }
+                        }
+                    },
+                    "401": { 
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/:id",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/:id",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "ORDER_NOT_FOUND",
+                                    "message": "Nenhum pedido encontrado para a unidade",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Atualizar status de um pedido",
+                "description": "Atualiza o status de um pedido por ID.",
+                "tags": ["Orders"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "ID do pedido"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": ["cozinha", "pronto", "entregue", "cancelado"]
+                                    }
+                                },
+                                "required": ["status"]
+                            },
+                            "example": {
+                                "status": "pronto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status do pedido atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Status do pedido atualizado com sucesso"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Atualização de status não permitida",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "ORDER_STATUS_UPDATE_NOT_ALLOWED",
+                                    "message": "Não é permitido alterar o status de um pedido entregue ou cancelado",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/:id",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/:id",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "ORDER_NOT_FOUND",
+                                    "message": "Pedido não encontrado",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pedidos/itens/{id}": {
+            "get": {
+                "summary": "Retornar todos os produtos de um pedido",
+                "description": "Retorna todos os produtos de um pedido.",
+                "tags": ["Orders"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "ID do pedido"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produtos do pedido retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": [ 
+                                        {
+                                            "id": "ba111111-0000-0000-0000-000000000001",
+                                            "pedido_id": "f0000000-0000-0000-0000-000000000001",
+                                            "produto_cardapio_id": "cccccccc-0000-0000-0000-000000000001",
+                                            "quantidade": 1,
+                                            "preco_unidade": "45.90",
+                                            "subtotal": "45.90"
+                                        },
+                                        {
+                                            "id": "ba111111-0000-0000-0000-000000000002",
+                                            "pedido_id": "f0000000-0000-0000-0000-000000000001",
+                                            "produto_cardapio_id": "cccccccc-0000-0000-0000-000000000002",
+                                            "quantidade": 1,
+                                            "preco_unidade": "18.50",
+                                            "subtotal": "18.50"
+                                        }
+                                ]
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/itens/:id",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/itens/:id",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": { 
+                        "description": "Sem permissão",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/itens/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Nenhum item encontrado para o pedido",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "ORDER_ITEMS_NOT_FOUND",
+                                    "message": "Nenhum item encontrado para o pedido",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/itens/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/itens/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pedidos": {
+            "post": {
+                "summary": "Criar um novo pedido",
+                "description": "Cria um novo pedido para uma unidade.",
+                "tags": ["Orders"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "unidade_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "produto_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "quantidade": {
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                }
+                                            },
+                                            "required": ["produto_id", "quantidade"]
+                                        }
+                                    },
+                                    "canal_pedido": {
+                                        "type": "string",
+                                        "enum": ["app", "balcão", "totem", "web"]
+                                    },
+                                    "forma_pagamento": {
+                                        "type": "string",
+                                        "enum": ["dinheiro", "cartão", "pix"]
+                                    }
+                                },
+                                "required": ["unidade_id", "canal_pedido", "forma_pagamento", "items"]
+                            },
+                            "example": {
+                                "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                "items": [
+                                    {
+                                        "produto_id": "cccccccc-0000-0000-0000-000000000001",
+                                        "quantidade": 2
+                                    },
+                                    {
+                                        "produto_id": "cccccccc-0000-0000-0000-000000000002",
+                                        "quantidade": 4
+                                    }
+                                ],
+                                "canal_pedido": "totem",
+                                "forma_pagamento": "debito"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pedido criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "order_id": "fae84b65-1fa3-4416-b1d1-6485f5094aa7",
+                                    "message": "Pedido criado com sucesso"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Recurso não encontrado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "unit_not_found": {
+                                        "summary": "Unidade não encontrada",
+                                        "value": {
+                                            "error": "UNIT_NOT_FOUND",
+                                            "message": "Unidade não encontrada",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "product_not_found": {
+                                        "summary": "Produto não encontrado ou inativo",
+                                        "value": {
+                                            "error": "PRODUCT_NOT_FOUND",
+                                            "message": "Produto cccccccc-0000-0000-0000-000000000001 não encontrado ou inativo",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "recipe_not_found": {
+                                        "summary": "Receita não encontrada para o produto",
+                                        "value": {
+                                            "error": "RECIPE_NOT_FOUND",
+                                            "message": "Receita não encontrada para o produto cccccccc-0000-0000-0000-000000000001",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "stock_item_not_found": {
+                                        "summary": "Item de estoque não encontrado",
+                                        "value": {
+                                            "error": "STOCK_ITEM_NOT_FOUND",
+                                            "message": "Item de estoque eeeeeeee-0000-0000-0000-000000000012 não encontrado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Quantidade insuficiente em estoque",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INSUFFICIENT_STOCK",
+                                    "message": "Quantidade insuficiente em estoque para o item eeeeeeee-0000-0000-0000-000000000012. Disponível: 5, Necessário: 10",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": { 
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pedidos/cancelar/{id}": {
+            "patch": {
+                "summary": "Cancelar um pedido",
+                "description": "Cancela um pedido por ID.",
+                "tags": ["Orders"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "ID do pedido"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pedido cancelado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Pedido cancelado com sucesso"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "ORDER_NOT_FOUND",
+                                    "message": "Pedido não encontrado",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/cancelar/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Cancelamento não permitido",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "order_already_cancelled": {
+                                        "summary": "Pedido já cancelado",
+                                        "value": {
+                                            "error": "ORDER_ALREADY_CANCELLED",
+                                            "message": "Pedido já está cancelado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/cancelar/:id",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "order_already_delivered": {
+                                        "summary": "Pedido já entregue",
+                                        "value": {
+                                            "error": "ORDER_ALREADY_DELIVERED",
+                                            "message": "Pedido já foi entregue e não pode ser cancelado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/cancelar/:id",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/cancelar/:id",
                                     "requestId": null
                                 }
                             }
