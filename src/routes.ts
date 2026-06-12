@@ -29,8 +29,8 @@ router.get("/unidades", authMiddleware, roleMiddleware(["*"]), UnitControler.get
 
 router.get("/estoques/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), InventoryController.getInventoryItems);
 router.post("/estoques/update", authMiddleware, roleMiddleware(["admin", "cozinha"]), InventoryController.updateInventoryItem);
-router.post("/estoques/new", authMiddleware, roleMiddleware(["admin"]), InventoryController.createInventoryItem);
-router.get("/estoques/log/:id", authMiddleware, roleMiddleware(["admin", "manager"]), InventoryController.getInventoryLog);
+router.post("/estoques/new", authMiddleware, roleMiddleware(["admin", "gerente"]), InventoryController.createInventoryItem);
+router.get("/estoques/log/:id", authMiddleware, roleMiddleware(["admin", "gerente"]), InventoryController.getInventoryLog);
 
 router.post("/estoque", InventoryController.updateInventoryItem);
 router.post("/estoque/new", InventoryController.createInventoryItem);
@@ -61,7 +61,7 @@ router.put("/pedido/cancelar/:id", OrderController.cancelOrder);
 
 router.post("/pagamentos", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentMockController.processPaymentMock);
 router.post("/pagamento", PaymentMockController.processPaymentMock);
-router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "manager"]), PaymentController.getPaymentLog);
+router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "gerente"]), PaymentController.getPaymentLog);
 
 router.get("/pagamento/log/:id", PaymentController.getPaymentLog);
 
