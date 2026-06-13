@@ -59,7 +59,7 @@ export const createCoupon = async (cupom: Coupon) => {
 export const createPrivateCoupon = async (cupom: PrivateCoupon) => {
     return await pool.query(
         "INSERT INTO cupons_clientes (id, unidade_id, usuario_id, cupom_id) " +
-        "VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4)",
+        "VALUES (COALESCE($1, gen_random_uuid()), $2, $3, $4) RETURNING *",
         [cupom.id ?? null, cupom.unidade_id, cupom.usuario_id, cupom.cupom_id]
     );
 }

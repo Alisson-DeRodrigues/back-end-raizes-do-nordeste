@@ -2650,6 +2650,623 @@
                     }
                 }
             }
+        },
+        "/cupons": {
+            "get": {
+                "summary": "Retornar todos os cupons",
+                "description": "Retorna todos os cupons.",
+                "tags": ["Coupons"],
+                "security": [{"bearerAuth": []}],
+                "responses": {
+                    "200": {
+                        "description": "Lista de cupons retornada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": [
+                                    {
+                                        "id": "e3cebc2d-c7f8-4821-9ee9-49ba3483e4f4",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "codigo": "CUPOM10P",
+                                        "nome": "Desconto de 10 reais",
+                                        "descricao": "Desconto de 10 reais para pedidos acima de R$100",
+                                        "publico": false,
+                                        "tipo": "fixo",
+                                        "valor": "10.00",
+                                        "valor_minimo_pedido": "100.00",
+                                        "inicia_em": "2026-06-04T15:35:40.395Z",
+                                        "expira_em": "2027-12-31T23:59:59.000Z",
+                                        "max_usos": 100,
+                                        "usos_atuais": 0,
+                                        "ativo": true,
+                                        "created_at": "2026-06-04T15:35:40.395Z"
+                                    },
+                                    {
+                                        "id": "e9880cc0-1f88-4af1-9a2f-df503a28a37c",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "codigo": "CUPOM10RESGATE",
+                                        "nome": "Desconto de 10 reais por resgate de pontos",
+                                        "descricao": "Desconto de 10 reais para pedidos acima de R$100 resgatado por pontos",
+                                        "publico": false,
+                                        "tipo": "fixo",
+                                        "valor": "10.00",
+                                        "valor_minimo_pedido": "100.00",
+                                        "inicia_em": "2026-06-04T16:49:18.246Z",
+                                        "expira_em": "2027-12-31T23:59:59.000Z",
+                                        "max_usos": 0,
+                                        "usos_atuais": 0,
+                                        "ativo": true,
+                                        "created_at": "2026-06-04T16:49:18.246Z"
+                                    },
+                                    {
+                                        "id": "2e8ae757-5d19-4e22-b31b-e9ca304e4b80",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "codigo": "CUPOM10",
+                                        "nome": "Desconto de 10%",
+                                        "descricao": "Desconto de 10% para pedidos acima de R$100",
+                                        "publico": true,
+                                        "tipo": "porcentagem",
+                                        "valor": "10.00",
+                                        "valor_minimo_pedido": "100.00",
+                                        "inicia_em": "2026-06-04T14:14:15.812Z",
+                                        "expira_em": "2024-12-31T23:59:59.000Z",
+                                        "max_usos": 100,
+                                        "usos_atuais": 3,
+                                        "ativo": true,
+                                        "created_at": "2026-06-04T14:14:15.812Z"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "Nenhum cupom encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Nenhum cupom encontrado"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/coupons",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/coupons",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/coupons",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Criar um novo cupom",
+                "description": "Cria um novo cupom.",
+                "tags": ["Coupons"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "unidade_id": {"type": "string", "format": "uuid"},
+                                    "codigo": {"type": "string"},
+                                    "nome": {"type": "string"},
+                                    "descricao": {"type": "string"},
+                                    "publico": {"type": "boolean"},
+                                    "tipo": {"type": "string", "enum": ["fixo", "porcentagem"]},
+                                    "valor": {"type": "string", "format": "decimal"},
+                                    "valor_minimo_pedido": {"type": "string", "format": "decimal"},
+                                    "inicia_em": {"type": "string", "format": "date-time"},
+                                    "expira_em": {"type": "string", "format": "date-time"},
+                                    "max_usos": {"type": "integer"}
+                                },
+                                "required": ["unidade_id", "codigo", "nome", "tipo", "valor"]
+                            },
+                            "example": {
+                                "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                "codigo": "CUPOM20",
+                                "nome": "Desconto de 20%",
+                                "descricao": "Desconto de 20% para pedidos acima de R$200",
+                                "publico": true,
+                                "tipo": "porcentagem",
+                                "valor": "20.00",
+                                "valor_minimo_pedido": "200.00",
+                                "inicia_em": "2026-06-10T00:00:00.000Z",
+                                "expira_em": "2026-12-31T23:59:59.000Z",
+                                "max_usos": 50
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cupom criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Cupom criado com sucesso",
+                                    "cupom": {
+                                        "id": "b1c1e0cc-462a-4b6a-acbe-bd7bc0494365",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "codigo": "CUPOM40",
+                                        "nome": "Desconto de 40%",
+                                        "descricao": "Desconto de 40% para pedidos acima de R$200",
+                                        "publico": true,
+                                        "tipo": "porcentagem",
+                                        "valor": "40.00",
+                                        "valor_minimo_pedido": "200.00",
+                                        "inicia_em": "2026-06-10T00:00:00.000Z",
+                                        "expira_em": "2026-12-31T23:59:59.000Z",
+                                        "max_usos": 50,
+                                        "usos_atuais": 0,
+                                        "ativo": true,
+                                        "created_at": "2026-06-13T20:55:42.344Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/coupons",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/coupons",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": { 
+                        "description": "Sem permissão",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/coupons",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": { 
+                        "description": "Unidade não encontrada",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "UNIT_NOT_FOUND",
+                                    "message": "Unidade não encontrada para associar ao cupom",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/coupons",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "409": { 
+                        "description": "Cupom já existe",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "COUPON_ALREADY_EXISTS",
+                                    "message": "Cupom já existe para esta unidade",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/coupons",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": { 
+                        "description": "Erro interno do servidor",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/coupons",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }   
+        },
+        "/cupons/private": {
+            "post": {
+                "summary": "Criar um cupom privado",
+                "description": "Cria um associação entre um cupom privado e um cliente específico.",
+                "tags": ["Coupons"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {"type": "string", "format": "uuid"},
+                                    "unidade_id": {"type": "string", "format": "uuid"},
+                                    "usuario_id": {"type": "string", "format": "uuid"},
+                                    "cupom_id": {"type": "string", "format": "uuid"}
+                                },
+                                "required": ["unidade_id", "usuario_id", "cupom_id"]
+                            },
+                            "example": {
+                                "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                "usuario_id": "ba000000-0000-0000-0000-000000000004",
+                                "cupom_id": "e9880cc0-1f88-4af1-9a2f-df503a28a37c"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cupom privado criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Cupom privado criado com sucesso",
+                                    "cupom": {
+                                        "id": "da5b6909-ba70-4c7a-ad15-1423eb39ce3c",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "usuario_id": "ba000000-0000-0000-0000-000000000004",
+                                        "cupom_id": "e9880cc0-1f88-4af1-9a2f-df503a28a37c",
+                                        "usado_em": null,
+                                        "status": "disponivel",
+                                        "atribuido_em": "2026-06-13T21:21:55.564Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/private",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/private",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": { 
+                        "description": "Sem permissão",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/cupons/private",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Unidade, usuário ou cupom não encontrado",
+                        "content": { 
+                            "application/json": {
+                                "examples": {
+                                    "unit_not_found": {
+                                        "summary": "Unidade não encontrada",
+                                        "value": {
+                                            "error": "UNIT_NOT_FOUND",
+                                            "message": "Unidade não encontrada",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/private",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "user_not_found": {
+                                        "summary": "Usuário não encontrado",
+                                        "value": {
+                                            "error": "USER_NOT_FOUND",
+                                            "message": "Usuário não encontrado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/private",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "coupon_not_found": {
+                                        "summary": "Cupom não encontrado",
+                                        "value": {
+                                            "error": "COUPON_NOT_FOUND",
+                                            "message": "Cupom não encontrado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/private",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": { 
+                        "description": "Erro interno do servidor",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/cupons/private",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cupons/resgate": {
+            "post": {
+                "summary": "Resgatar um cupom por pontos",
+                "description": "Permite que um cliente resgate um cupom utilizando seus pontos acumulados.",
+                "tags": ["Coupons"],
+                "security": [{"bearerAuth": []}],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "usuario_id": {"type": "string", "format": "uuid"},
+                                    "unidade_id": {"type": "string", "format": "uuid"},
+                                    "codigo_id": {"type": "string", "format": "uuid"}
+                                },
+                                "required": ["usuario_id", "unidade_id", "codigo_id"]
+                            },
+                            "example": {
+                                "usuario_id": "ba000000-0000-0000-0000-000000000004",
+                                "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                "codigo_id": "CUPOM10RESGATE"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cupom resgatado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "message": "Cupom resgatado com sucesso",
+                                    "cupom": {
+                                        "id": "e9880cc0-1f88-4af1-9a2f-df503a28a37c",
+                                        "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                        "codigo": "CUPOM10RESGATE",
+                                        "nome": "Desconto de 10 reais por resgate de pontos",
+                                        "descricao": "Desconto de 10 reais para pedidos acima de R$100 resgatado por pontos",
+                                        "publico": false,
+                                        "tipo": "fixo",
+                                        "valor": "10.00",
+                                        "valor_minimo_pedido": "100.00",
+                                        "inicia_em": "2026-06-04T16:49:18.246Z",
+                                        "expira_em": "2027-12-31T23:59:59.000Z",
+                                        "max_usos": 0,
+                                        "usos_atuais": 0,
+                                        "ativo": true,
+                                        "created_at": "2026-06-04T16:49:18.246Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida ou pontos insuficientes",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "BAD_REQUEST",
+                                    "message": "Requisição de resgate de cupom falhou",
+
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/cupons/resgate",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "401": { 
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/resgate",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/resgate",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/cupons/resgate",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário, unidade ou cupom não encontrado",
+                        "content": { 
+                            "application/json": {
+                                "examples": {
+                                    "user_not_found": {
+                                        "summary": "Usuário não encontrado",
+                                        "value": {
+                                            "error": "USER_NOT_FOUND",
+                                            "message": "Usuário não encontrado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/resgate",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "unit_not_found": {
+                                        "summary": "Unidade não encontrada",
+                                        "value": {
+                                            "error": "UNIT_NOT_FOUND",
+                                            "message": "Unidade não encontrada",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/resgate",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "coupon_not_found": {
+                                        "summary": "Cupom não encontrado",
+                                        "value": {
+                                            "error": "COUPON_NOT_FOUND",
+                                            "message": "Cupom não encontrado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/cupons/resgate",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Pontos insuficientes para resgatar o cupom",
+                        "content": { 
+                            "application/json": {
+                                "example": {
+                                    "error": "INSUFFICIENT_POINTS",
+                                    "message": "Pontos insuficientes para resgatar este cupom",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/cupons/resgate",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {

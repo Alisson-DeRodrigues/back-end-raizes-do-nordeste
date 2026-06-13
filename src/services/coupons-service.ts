@@ -10,13 +10,13 @@ export const getAllCouponsService = async () => {
         if (result.rows.length === 0){
             return {
                 status: 204,
-                body: "Nenhum cupom encontrado"
+                body: { message: "Nenhum cupom encontrado" }
             }
         }
 
         return {
             status: 200,
-            body: result.rows[0]
+            body: result.rows
         }
 }
 
@@ -30,7 +30,7 @@ export const createCouponService = async (cupom: Coupon) => {
                 status: 404,
                 body: createErrorMessage(
                     "UNIT_NOT_FOUND",
-                    "Unidade não encontrada para associar o cupom",
+                    "Unidade não encontrada para associar ao cupom",
                     "/cupons"
                 )
             }
@@ -69,8 +69,20 @@ export const createCouponService = async (cupom: Coupon) => {
 
 export const createPrivateCouponService = async (cupom: PrivateCoupon) => {
     try {
+        const unidade_existe = await getUnitByIdService(cupom.unidade_id);
         const usuario_existe = await findUserById(cupom.usuario_id);
         const cupom_existe = await CouponRepository.findCouponByCouponIdAndUnitId(cupom.cupom_id, cupom.unidade_id);
+
+        if(unidade_existe.status !== 200) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "UNIT_NOT_FOUND",
+                    "Unidade não encontrada",
+                    "/cupons/private"
+                )
+            }
+        }
 
         if(usuario_existe.rows.length === 0) {
             return {
@@ -98,7 +110,7 @@ export const createPrivateCouponService = async (cupom: PrivateCoupon) => {
 
         return {
             status: 201,
-            body: { message: "Cupom criado com sucesso", cupom: result.rows[0] }
+            body: { message: "Cupom privado criado com sucesso", cupom: result.rows[0] }
         }
 
     } catch(error){
@@ -118,6 +130,18 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
     try {
         const usuario_existe = await findUserById(cupom.usuario_id);
         const cupom_existe = await CouponRepository.findCouponByCodeAndUnitId(cupom.codigo_id, cupom.unidade_id);
+        const unidade_existe = await getUnitByIdService(cupom.unidade_id);
+
+        if(unidade_existe.status !== 200) {
+            return {
+                status: 404,
+                body: createErrorMessage(
+                    "UNIT_NOT_FOUND",
+                    "Unidade não encontrada",
+                    "/cupons/resgate"
+                )
+            }
+        }
 
         if(usuario_existe.rows.length === 0) {
             return {
@@ -143,7 +167,7 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
 
         if (usuario_existe.rows[0].pontos < cupom_existe.rows[0].valor) {
             return {
-                status: 400,
+                status: 409,
                 body: createErrorMessage(
                     "INSUFFICIENT_POINTS",
                     "Pontos insuficientes para resgatar este cupom",
@@ -162,15 +186,15 @@ export const redeemCouponService = async (cupom: RedeemCoupon) => {
 
             return {
                 status: 201,
-                body: { message: "Cupom resgatado com sucesso", usuario: usuario_existe.rows[0], cupom: cupom_existe.rows[0] }
+                body: { message: "Cupom resgatado com sucesso", cupom: cupom_existe.rows[0] }
             }
         }
 
         return {
             status: 400,
             body: createErrorMessage(
-                "UNKNOWN_ERROR",
-                "Ocorreu um erro desconhecido ao resgatar o cupom",
+                "BAD_REQUEST",
+                "Requisição de resgate de cupom falhou",
                 "/cupons/resgate"
             )
         };
