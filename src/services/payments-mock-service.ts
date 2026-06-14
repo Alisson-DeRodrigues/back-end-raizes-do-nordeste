@@ -112,8 +112,6 @@ export async function processPaymentService(order_id: string, cliente_email: str
             }
         }
 
-        // simular tentar pagar pedido cancelado ou já entregue (atualmente apenas retorna pagamento pendente, mas poderia retornar um erro específico para cada caso)
-
         return {
             status: 500,
             body: createErrorMessage(
