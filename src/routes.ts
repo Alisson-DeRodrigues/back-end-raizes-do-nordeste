@@ -27,8 +27,8 @@ router.patch("/clientes/fidelidade", authMiddleware, roleMiddleware(["cliente"])
 router.get("/unidades", authMiddleware, roleMiddleware(["*"]), UnitControler.getAllUnits);
 
 
-router.get("/estoques/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), InventoryController.getInventoryItems);
-router.patch("/estoques/update", authMiddleware, roleMiddleware(["admin", "cozinha"]), InventoryController.updateInventoryItem);
+router.get("/estoques/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha"]), InventoryController.getInventoryItems);
+router.patch("/estoques/update", authMiddleware, roleMiddleware(["admin", "gerente", "cozinha"]), InventoryController.updateInventoryItem);
 router.post("/estoques/new", authMiddleware, roleMiddleware(["admin", "gerente"]), InventoryController.createInventoryItem);
 router.get("/estoques/log/:id", authMiddleware, roleMiddleware(["admin", "gerente"]), InventoryController.getInventoryLog);
 
@@ -39,15 +39,16 @@ router.post("/cardapio/recipe", authMiddleware, roleMiddleware(["admin"]), MenuC
 router.get("/cardapio/recipe/:id", authMiddleware, roleMiddleware(["admin"]), MenuController.getRecipeByProductId);
 
 
-router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrders);
+router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha"]), OrderController.getAllOrders);
+router.get("/pedidos/status/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha", "cliente"]), OrderController.getOrderById);
 router.get("/pedidos/itens/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrderItems);
-router.post("/pedidos", authMiddleware, roleMiddleware(["admin", "atendente", "cliente"]), OrderController.createOrder);
-router.patch("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente"]), OrderController.updateOrderStatus);
+router.post("/pedidos", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha"]), OrderController.createOrder);
+router.patch("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.updateOrderStatus);
 router.patch("/pedidos/cancelar/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cliente"]), OrderController.cancelOrder);
 
 
-router.post("/pagamentos", authMiddleware, roleMiddleware(["admin", "atendente"]), PaymentMockController.processPaymentMock);
-router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "gerente"]), PaymentController.getPaymentLog);
+router.post("/pagamentos", authMiddleware, roleMiddleware(["admin", "gerente", "atendente"]), PaymentMockController.processPaymentMock);
+router.get("/pagamentos/log/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente"]), PaymentController.getPaymentLog);
 
 
 router.get("/cupons", authMiddleware, roleMiddleware(["admin"]), CouponController.getCoupons);

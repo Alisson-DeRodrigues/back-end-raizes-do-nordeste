@@ -103,6 +103,26 @@
                             }
                         }
                     },
+                    "422": {
+                        "description": "Campo email inválido",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "USER_VALIDATION_ERROR",
+                                    "message": "Email inválido",
+                                    "details": [
+                                        {
+                                            "field": "email",
+                                            "issue": "Formato de email inválido"
+                                        }
+                                    ],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/register",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
                     "500": {
                         "description": "Erro interno do servidor",
                         "content": {
@@ -1933,6 +1953,120 @@
                 }
             }
         },
+        "/pedidos/status/:id": {
+            "get": {
+                "summary": "Obter detalhes de um pedido por ID",
+                "description": "Retorna os detalhes de um pedido, incluindo status, por ID.",
+                "tags": ["Orders"],
+                "security": [{"bearerAuth": []}],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "ID do pedido"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do pedido retornados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "id": "e3a10144-2476-4fcc-83fa-d9bc1c795ef7",
+                                    "unidade_id": "22222222-2222-2222-2222-222222222222",
+                                    "total": "193.20",
+                                    "canal_pedido": "web",
+                                    "forma_pagamento": "pix",
+                                    "status": "cozinha",
+                                    "created_at": "2026-06-14T05:25:15.325Z"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "login_unauthorized": {
+                                        "summary": "Usuário não autenticado",
+                                        "value": {
+                                            "error": "LOGIN_UNAUTHORIZED",
+                                            "message": "Usuário não autenticado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/status/:id",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "invalid_token": {
+                                        "summary": "Token inválido ou expirado",
+                                        "value": {
+                                            "error": "UNAUTHORIZED",
+                                            "message": "Token inválido ou expirado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pedidos/status/:id",
+                                            "requestId": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "FORBIDDEN",
+                                    "message": "Usuário sem permissão",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/status/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pedido não encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "ORDER_NOT_FOUND",
+                                    "message": "Pedido não encontrado",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/status/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "error": "INTERNAL_SERVER_ERROR",
+                                    "message": "Erro interno do servidor",
+                                    "details": [],
+                                    "timestamp": "2026-06-10T15:22:28.583Z",
+                                    "path": "/pedidos/status/:id",
+                                    "requestId": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/pedidos/itens/{id}": {
             "get": {
                 "summary": "Retornar todos os produtos de um pedido",
@@ -2404,13 +2538,29 @@
                         "description": "Pagamento recusado",
                         "content": {
                             "application/json": {
-                                "example": {
-                                    "error": "PAYMENT_REFUSED",
-                                    "message": "Pagamento recusado",
-                                    "details": [],
-                                    "timestamp": "2026-06-10T15:22:28.583Z",
-                                    "path": "/pagamentos",
-                                    "requestId": null
+                                "examples": {
+                                    "payment_refused": {
+                                        "summary": "Pagamento recusado",
+                                        "value": {
+                                            "error": "PAYMENT_REFUSED",
+                                            "message": "Pagamento recusado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    },
+                                    "payment_already_approved": {
+                                        "summary": "Pagamento já aprovado",
+                                        "value": {
+                                            "error": "PAYMENT_ALREADY_APPROVED",
+                                            "message": "Pagamento já aprovado",
+                                            "details": [],
+                                            "timestamp": "2026-06-10T15:22:28.583Z",
+                                            "path": "/pagamentos",
+                                            "requestId": null
+                                        }
+                                    }
                                 }
                             }
                         }

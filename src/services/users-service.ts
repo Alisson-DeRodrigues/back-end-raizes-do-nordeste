@@ -64,6 +64,18 @@ export const registerClientService = async (unidade_id: any, name: string, email
         const existingUnit = await UnitRepository.findUnitById(unidade_id);
         const existingUser = await UserRepository.findUserByEmail(email);
     
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return {
+                status: 422,
+                body: createErrorMessage(
+                    "USER_VALIDATION_ERROR",
+                    "Email inválido",
+                    "/register",
+                    [{ field: "email", issue: "Email inválido" }]
+                )
+            }
+        }
+
         if (existingUnit.rows.length === 0) {
             return {
                 status: 404,

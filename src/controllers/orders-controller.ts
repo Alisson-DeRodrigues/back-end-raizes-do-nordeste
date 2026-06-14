@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
 import * as OrderService from "../services/orders-service";
 
-export const getOrders = async (req: Request, res: Response) => {
+export const getAllOrders = async (req: Request, res: Response) => {
     const unidade_id = req.params.id as string;
 
     let httpResponse = await OrderService.getAllOrdersByUnitIdService(unidade_id);
+
+    return res.status(httpResponse.status).json(httpResponse.body);
+}
+
+export const getOrderById = async (req: Request, res: Response) => {
+    const order_id = req.params.id as string;
+
+    let httpResponse = await OrderService.getOrderByIdService(order_id);
 
     return res.status(httpResponse.status).json(httpResponse.body);
 }

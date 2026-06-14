@@ -77,7 +77,8 @@ export const getOrderByIdService = async (order_id: string) => {
                 status: 404,
                 body: createErrorMessage(
                     "ORDER_NOT_FOUND",
-                    "Pedido não encontrado"
+                    "Pedido não encontrado",
+                    "/pedidos/status/:id"
                 )
             }
         }
@@ -93,7 +94,8 @@ export const getOrderByIdService = async (order_id: string) => {
             status: 500,
             body: createErrorMessage(
                 "INTERNAL_SERVER_ERROR",
-                "Erro interno do servidor"
+                "Erro interno do servidor",
+                "/pedidos/status/:id"
             )
         }
     }
