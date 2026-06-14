@@ -1,10 +1,9 @@
 {
     "openapi": "3.0.0",
     "info":{
-        "title": "API de Raízes do Nordeste",
+        "title": "Back-end de Raízes do Nordeste",
         "version": "1.0.0",
         "description": "API de Raízes do Nordeste com cadastro de clientes, login, manipulação de estoque, cardápio da unidade e vendas.",
-        "termsOfService": "http://example.com/terms/",
         "contact": {
             "name": "Suporte Raízes do Nordeste",
             "email": "suporte@raizesdonordeste.com"

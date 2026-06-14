@@ -1,0 +1,48 @@
+classDiagram
+    class franquias {
+        +UUID id
+        +VARCHAR nome
+    }
+    class unidades {
+        +UUID id
+        +UUID franquia_id
+        +VARCHAR nome
+    }
+    class usuarios {
+        +UUID id
+        +UUID unidade_id
+        +VARCHAR nome
+        +VARCHAR email
+        +BOOLEAN ativo_programa_fidelidade
+        +NUMERIC pontos
+        +TEXT role
+    }
+    class pontos_transacao {
+        +UUID id
+        +UUID unidade_id
+        +UUID usuario_id
+        +INTEGER pontos
+        +VARCHAR tipo_transacao
+    }
+
+    franquias "1" <-- "0..*" unidades : pertence a
+    unidades "1" <-- "0..*" usuarios : gerencia
+    unidades "1" <-- "0..*" pontos_transacao : audita
+    usuarios "1" <-- "0..*" pontos_transacao : acumula
+
+    class units-repository.ts {
+        +findAllUnits()
+        +findUnitById(string unidade_id)
+    }
+    class users-repository.ts {
+        +findUserByEmail(string email)
+        +findUserById(string id)
+        +createClient(...)
+        +updateClientFidelityPoints(...)
+        +updateClientPoints(...)
+        +registerClientPointTransaction(...)
+    }
+
+    units-repository.ts ..> unidades : manipula
+    users-repository.ts ..> usuarios : manipula
+    users-repository.ts ..> pontos_transacao : manipula

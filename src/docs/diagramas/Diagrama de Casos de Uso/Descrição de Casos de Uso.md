@@ -14,7 +14,7 @@ Produto disponível em cardápio.
 
 ## Pós-condições
 O status do pedido fica "cozinha".
-O staus do pagamento fica "pendente".
+O status do pagamento fica "pendente".
 O sistema emite aviso.
 
 ## Origem das informações
@@ -74,7 +74,7 @@ N/C
 N/C
 
 ## Fluxo base
-Clinte solicita pagamento;
+Cliente solicita pagamento;
 Cliente usa cupom (opcional);
 Cliente paga o pedido;
 Sistema de pagamento processa a requisição;
@@ -84,7 +84,7 @@ Sistema emite aviso.
 N/C
 
 ## Regras de negócio
-RN01 - O pagamento gera pontos quando o programa fidelidade for aceito pelo cliente
+RN01 - O pagamento gera pontos quando o programa fidelidade for aceito pelo cliente.
 
 
 # UC03 - Resgatar Pontos
@@ -139,14 +139,14 @@ Cliente.
 
 ## Pré-condições
 Produtos disponíveis em cardápio.
-Itens para suficiete para preparar o pedido em estoque.
+Itens suficientes para preparar o pedido em estoque.
 
 ## Pós-condições
 Pedido criado com status "cozinha".
 Pagamento criado com status "pendente".
 
 ## Origem das informações
-Banco de dado da rede;
+Banco de dados da rede;
 Cliente.
 
 ## Usuários responsáveis
@@ -240,7 +240,7 @@ N/C
 
 ## Fluxo base
 Cozinha consulta o pedido;
-Cozinha obtem os itens dos produtos no estoque;
+Cozinha obtém os itens dos produtos no estoque;
 Cozinha prepara os produtos;
 Cozinha atualiza status do pedido para "pronto";
 Sistema emite aviso
@@ -347,7 +347,7 @@ O sistema atualiza o status do pagamento para "pago" ou "recusado".
 O sistema emite aviso.
 
 ## Origem das informações
-Bando de dados da rede.
+Banco de dados da rede.
 Sistema externo de pagamento.
 
 ## Usuários responsáveis

@@ -1,0 +1,39 @@
+classDiagram
+    class unidades {
+        +UUID id
+    }
+    class usuarios {
+        +UUID id
+    }
+    class cupons {
+        +UUID id
+        +UUID unidade_id
+        +VARCHAR codigo
+        +NUMERIC valor
+    }
+    class cupons_clientes {
+        +UUID id
+        +UUID unidade_id
+        +UUID usuario_id
+        +UUID cupom_id
+        +VARCHAR status
+    }
+
+    unidades "1" <-- "0..*" cupons : cria
+    unidades "1" <-- "0..*" cupons_clientes : distribui
+    usuarios "1" <-- "0..*" cupons_clientes : recebe
+    cupons "1" <-- "0..*" cupons_clientes : aplicado em
+
+    class coupons-repository.ts {
+        +findCouponByCodeAndUnitId(...)
+        +findCouponByCouponIdAndUnitId(...)
+        +findAllCoupons()
+        +findPrivateCouponsByUserIdAndCouponId(...)
+        +createCoupon(Coupon cupom)
+        +createPrivateCoupon(PrivateCoupon cupom)
+        +updateCouponStatusToUsed(string id)
+        +incrementCouponUsage(string id)
+    }
+
+    coupons-repository.ts ..> cupons : manipula
+    coupons-repository.ts ..> cupons_clientes : manipula

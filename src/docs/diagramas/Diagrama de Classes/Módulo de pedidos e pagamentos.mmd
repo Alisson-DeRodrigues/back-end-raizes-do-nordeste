@@ -1,0 +1,51 @@
+classDiagram
+    class unidades {
+        +UUID id
+    }
+    class pedidos {
+        +UUID id
+        +UUID unidade_id
+        +NUMERIC total
+        +VARCHAR status
+    }
+    class pedido_itens {
+        +UUID id
+        +UUID pedido_id
+        +UUID produto_cardapio_id
+        +INTEGER quantidade
+        +NUMERIC subtotal
+    }
+    class pagamentos_pedidos {
+        +UUID id
+        +UUID pedido_id
+        +VARCHAR metodo_pagamento
+        +NUMERIC valor
+        +VARCHAR status
+    }
+    class produtos_cardapio {
+        +UUID id
+    }
+
+    unidades "1" <-- "0..*" pedidos : recebe
+    pedidos "1" <-- "0..*" pedido_itens : contém
+    pedidos "1" <-- "0..*" pagamentos_pedidos : possui
+    produtos_cardapio "1" <-- "0..*" pedido_itens : inserido em
+
+    class orders-repository.ts {
+        +findOrdersByUnitId(string unidade_id)
+        +findOrderItemsByOrderId(string order_id)
+        +findOrderById(string order_id)
+        +createOrder(...)
+        +createOrderItem(...)
+        +updateOrderStatus(...)
+    }
+    class payments-repository.ts {
+        +findPaymentsByOrderId(string id)
+        +insertPaymentPaid(...)
+        +insertPaymentRefused(...)
+        +createOrderPayment(...)
+    }
+
+    orders-repository.ts ..> pedidos : manipula
+    orders-repository.ts ..> pedido_itens : manipula
+    payments-repository.ts ..> pagamentos_pedidos : manipula

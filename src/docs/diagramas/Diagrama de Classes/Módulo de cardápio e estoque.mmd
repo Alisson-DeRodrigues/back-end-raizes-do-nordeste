@@ -1,0 +1,55 @@
+classDiagram
+    class unidades {
+        +UUID id
+    }
+    class estoque_itens {
+        +UUID id
+        +UUID unidade_id
+        +VARCHAR nome
+        +NUMERIC estoque_atual
+    }
+    class movimentacao_estoques {
+        +UUID id
+        +UUID unidade_id
+        +UUID estoque_item_id
+        +VARCHAR tipo
+        +NUMERIC quantidade
+    }
+    class produtos_cardapio {
+        +UUID id
+        +UUID unidade_id
+        +VARCHAR nome
+        +NUMERIC preco
+    }
+    class receita_produtos {
+        +UUID id
+        +UUID produto_cardapio_id
+        +UUID estoque_item_id
+        +NUMERIC quantidade_usada
+    }
+
+    unidades "1" <-- "0..*" estoque_itens : possui
+    unidades "1" <-- "0..*" produtos_cardapio : comercializa
+    unidades "1" <-- "0..*" movimentacao_estoques : registra
+    produtos_cardapio "1" <-- "0..*" receita_produtos : composto por
+    estoque_itens "1" <-- "0..*" receita_produtos : usado em
+    estoque_itens "1" <-- "0..*" movimentacao_estoques : sofre
+
+    class menus-repository.ts {
+        +findMenuByUnitId(string unidade_id)
+        +findProductById(string produto_id)
+        +findRecipeByProductId(string produto_id)
+        +createMenuItem(MenuItem menuItem)
+        +createRecipeItem(RecipeItem recipeItem)
+    }
+    class inventories_repository.ts {
+        +findInventoryItemsByUnitId(string unidade_id)
+        +updateInventory(any item_id, number quantidade)
+        +createInventoryMovement(...)
+        +createInventoryItem(...)
+    }
+
+    menus-repository.ts ..> produtos_cardapio : manipula
+    menus-repository.ts ..> receita_produtos : manipula
+    inventories_repository.ts ..> estoque_itens : manipula
+    inventories_repository.ts ..> movimentacao_estoques : manipula
