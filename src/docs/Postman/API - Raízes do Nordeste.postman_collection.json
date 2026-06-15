@@ -1,0 +1,3385 @@
+{
+  "info": {
+    "_postman_id": "a1bac9fb-33dc-443c-be73-12af41bf61d7",
+    "name": "API - Raízes do Nordeste",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46634291",
+    "_collection_link": "https://go.postman.co/collection/46634291-a1bac9fb-33dc-443c-be73-12af41bf61d7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Rotas",
+      "item": [
+        {
+          "name": "Register",
+          "item": [
+            {
+              "name": "Registar cliente",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"name\": \"Cliente Teste\",\r\n    \"email\": \"cliente@teste.com\",\r\n    \"password\": \"senha123\",\r\n    \"ativo_programa_fidelidade\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/register",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Realizar login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"MEU_TOKEN\", jsonData.token);"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/login",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Retornar usuário logado",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/login",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Alterar adesão ao programa fidelidade",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"ativo_programa_fidelidade\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/clientes/fidelidade",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "clientes",
+                    "fidelidade"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Units",
+          "item": [
+            {
+              "name": "Retornar todas as unidades",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"ativo_programa_fidelidade\": true\r\n}"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/unidades",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "unidades"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Inventories",
+          "item": [
+            {
+              "name": "Retornar todos os itens do estoque por ID da unidade",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"ativo_programa_fidelidade\": true\r\n}"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/estoques/{{UNIDADE_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "estoques",
+                    "{{UNIDADE_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Alterar a quantidade de um item no estoque",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"item_id\": \"eeeeeeee-0000-0000-0000-000000000026\",\r\n    \"quantidade\": 1500,\r\n    \"acao\": \"adicionar\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/estoques/update",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "estoques",
+                    "update"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Adicionar novo item ao estoque",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"nome\": \"Fruta do Conde\",\r\n    \"unidade_de_medida\": \"kg\",\r\n    \"estoque_minimo\": 5\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/estoques/new",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "estoques",
+                    "new"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter log de alterações do estoque",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/estoques/log/{{UNIDADE_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "estoques",
+                    "log",
+                    "{{UNIDADE_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Menus",
+          "item": [
+            {
+              "name": "Obter cardápio por ID da unidade",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/cardapio/{{UNIDADE_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cardapio",
+                    "{{UNIDADE_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Criar produto do cardápio",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"nome\": \"Hambúrguer de Frango\",\r\n    \"descricao\": \"Delicioso hambúrguer de frango com alface, tomate e maionese.\",\r\n    \"preco\": 19.90,\r\n    \"ativo\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/cardapio",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cardapio"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Criar receita de produto do cardápio",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"id\": \"dddddddd-0000-0000-0000-000000000015\",\r\n    \"produto_cardapio_id\": \"cccccccc-0000-0000-0000-000000000004\",\r\n    \"estoque_item_id\": \"eeeeeeee-0000-0000-0000-000000000012\",\r\n    \"quantidade_usada\": 2\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/cardapio/recipe",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cardapio",
+                    "recipe"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter receita por ID do produto",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/cardapio/recipe/cccccccc-0000-0000-0000-000000000002",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cardapio",
+                    "recipe",
+                    "cccccccc-0000-0000-0000-000000000002"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Orders",
+          "item": [
+            {
+              "name": "Retornar todos os pedidos de uma unidade",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/{{UNIDADE_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "{{UNIDADE_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Retornar pedido por ID",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/status/{{ORDER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "status",
+                    "{{ORDER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Alterar status de um pedido",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": \"pronto\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/f0000000-0000-0000-0000-000000000001",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "f0000000-0000-0000-0000-000000000001"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Retornar todos os produtos de um pedido",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/itens/f0000000-0000-0000-0000-000000000001",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "itens",
+                    "f0000000-0000-0000-0000-000000000001"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Criar um novo pedido",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000001\",\r\n            \"quantidade\": 2\r\n        },\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000002\",\r\n            \"quantidade\": 4\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"totem-cupom5\",\r\n    \"forma_pagamento\": \"debito5\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Cancelar um pedido",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/cancelar/df04cae7-0ec6-4703-95f3-e5a1b9fd8cdb",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "cancelar",
+                    "df04cae7-0ec6-4703-95f3-e5a1b9fd8cdb"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Payments",
+          "item": [
+            {
+              "name": "Realizar pagamento de um pedido",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"order_id\": \"e636597d-f23c-4485-9833-1dcff7f56ff3\",\r\n    \"cliente_email\": \"cliente@email.com\",\r\n    \"cupom_codigo\": \"CUPOM10\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pagamentos",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pagamentos"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Obter log de pagamentos da unidade",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pagamentos/log/{{UNIDADE_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pagamentos",
+                    "log",
+                    "{{UNIDADE_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Coupons",
+          "item": [
+            {
+              "name": "Retornar todos os cupons",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/cupons",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cupons"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Criar um cupom",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"codigo\": \"CUPOM40\",\r\n    \"nome\": \"Desconto de 40%\",\r\n    \"descricao\": \"Desconto de 40% para pedidos acima de R$200\",\r\n    \"publico\": true,\r\n    \"tipo\": \"porcentagem\",\r\n    \"valor\": \"40\",\r\n    \"valor_minimo_pedido\": \"200.00\",\r\n    \"inicia_em\": \"2026-06-10T00:00:00.000Z\",\r\n    \"expira_em\": \"2026-12-31T23:59:59.000Z\",\r\n    \"max_usos\": 50\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/cupons",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cupons"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Criar um cupom privado",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"usuario_id\": \"ba000000-0000-0000-0000-000000000004\",\r\n    \"cupom_id\": \"e9880cc0-1f88-4af1-9a2f-df503a28a37c\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/cupons/private",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cupons",
+                    "private"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Resgatar um cupom por pontos",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"usuario_id\": \"ba000000-0000-0000-0000-000000000004\",\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"codigo_id\": \"CUPOM10RESGATE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/cupons/resgate",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cupons",
+                    "resgate"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Testes",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Registrar cliente",
+              "item": [
+                {
+                  "name": "Registrar cliente",
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"name\": \"Carlos\",\r\n    \"email\": \"carlos@teste.com\",\r\n    \"password\": \"carlosTeste\",\r\n    \"ativo_programa_fidelidade\": true\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/register",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "register"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Registrar cliente com email inválido",
+              "item": [
+                {
+                  "name": "Registrar cliente",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"cliente0email.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/register",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "register"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Login cliente",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"cliente@email.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Units",
+          "item": [
+            {
+              "name": "Listar unidades",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Retornar todas as unidades\");"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"cliente@email.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Retornar todas as unidades",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/unidades",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "unidades"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Listar unidades sem token",
+              "item": [
+                {
+                  "name": "Retornar todas as unidades",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/unidades",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "unidades"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Menus",
+          "item": [
+            {
+              "name": "Obter cardápio da unidade",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Obter cardápio por ID da unidade\");"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJhMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwNCIsInJvbGUiOiJjbGllbnRlIiwiaWF0IjoxNzgxMzk1MDEyLCJleHAiOjE3ODEzOTg2MTJ9.m8cXdSjA3n3kMUR7hm2goV_g2geYSVzAdvVccOL_M48",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"cliente@email.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Obter cardápio por ID da unidade",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/cardapio/{{UNIDADE_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "cardapio",
+                        "{{UNIDADE_ID}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Orders",
+          "item": [
+            {
+              "name": "Retornar todos os pedidos de uma unidade",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Retornar todos os pedidos de uma unidade\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Retornar todos os pedidos de uma unidade",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos/{{UNIDADE_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        "{{UNIDADE_ID}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Criar pedido",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Criar um novo pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Criar um novo pedido",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"ORDER_ID\", jsonData.order_id);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000001\",\r\n            \"quantidade\": 3\r\n        },\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000002\",\r\n            \"quantidade\": 3\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"web\",\r\n    \"forma_pagamento\": \"pix\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Criar pedido com produto inexistente",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Criar um novo pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Criar um novo pedido",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000021\",\r\n            \"quantidade\": 3\r\n        },\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000002\",\r\n            \"quantidade\": 3\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"web\",\r\n    \"forma_pagamento\": \"pix\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Criar pedido com unidade inexistente",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Criar um novo pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Criar um novo pedido",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222223\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000001\",\r\n            \"quantidade\": 3\r\n        },\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000002\",\r\n            \"quantidade\": 3\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"web\",\r\n    \"forma_pagamento\": \"pix\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Criar pedido com estoque insuficiente",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Criar um novo pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Criar um novo pedido",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000001\",\r\n            \"quantidade\": 300\r\n        },\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000002\",\r\n            \"quantidade\": 300\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"web\",\r\n    \"forma_pagamento\": \"pix\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Obter status do pedido",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Retornar pedido por ID\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Retornar pedido por ID",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos/status/{{ORDER_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        "status",
+                        "{{ORDER_ID}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Inventories",
+          "item": [
+            {
+              "name": "Listar estoque",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Retornar todos os itens do estoque por ID da unidade\");"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Retornar todos os itens do estoque por ID da unidade",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"ativo_programa_fidelidade\": true\r\n}"
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/estoques/{{UNIDADE_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "estoques",
+                        "{{UNIDADE_ID}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Retornar log de estoque sem permissão",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Obter log de alterações do estoque\");"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"cliente@email.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Obter log de alterações do estoque",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{BASE_URL}}/estoques/log/{{UNIDADE_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "estoques",
+                        "log",
+                        "{{UNIDADE_ID}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Abastecer item do estoque sem o campo \"acao\"",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Alterar a quantidade de um item no estoque\");"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Alterar a quantidade de um item no estoque",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PATCH",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"22222222-2222-2222-2222-222222222222\",\r\n    \"item_id\": \"eeeeeeee-0000-0000-0000-000000000025\",\r\n    \"quantidade\": 1500\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/estoques/update",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "estoques",
+                        "update"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Payments",
+          "item": [
+            {
+              "name": "Pagar pedido",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Criar um novo pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Criar um novo pedido",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"ORDER_ID\", jsonData.order_id);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Realizar pagamento de um pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000001\",\r\n            \"quantidade\": 3\r\n        },\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000002\",\r\n            \"quantidade\": 3\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"web\",\r\n    \"forma_pagamento\": \"pix\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Realizar pagamento de um pedido",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"order_id\": \"{{ORDER_ID}}\",\r\n    \"cliente_email\": \"cliente@email.com\",\r\n    \"cupom_codigo\": \"CUPOM10\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pagamentos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pagamentos"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Pagar pedido já pago",
+              "item": [
+                {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Criar um novo pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Criar um novo pedido",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"ORDER_ID\", jsonData.order_id);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Realizar pagamento de um pedido\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000001\",\r\n            \"quantidade\": 3\r\n        },\r\n        {\r\n            \"produto_id\": \"cccccccc-0000-0000-0000-000000000002\",\r\n            \"quantidade\": 3\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"web\",\r\n    \"forma_pagamento\": \"pix\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Realizar pagamento de um pedido",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.execution.setNextRequest(\"Realizar pagamento de um pedido novamente\");"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"order_id\": \"{{ORDER_ID}}\",\r\n    \"cliente_email\": \"cliente@email.com\",\r\n    \"cupom_codigo\": \"CUPOM10\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pagamentos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pagamentos"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Realizar pagamento de um pedido novamente",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"order_id\": \"{{ORDER_ID}}\",\r\n    \"cliente_email\": \"cliente@email.com\",\r\n    \"cupom_codigo\": \"CUPOM10\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pagamentos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pagamentos"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Exibir log de pagamentos",
+              "item": [
+                {
+                  "name": "Obter log de pagamentos da unidade",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{MEU_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pagamentos/log/{{UNIDADE_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pagamentos",
+                        "log",
+                        "{{UNIDADE_ID}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Fluxo completo: criação, pagamento e entrega de pedido",
+          "item": [
+            {
+              "name": "Registrar cliente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.execution.setNextRequest(\"Realizar login cliente\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"name\": \"Alisson de S. Rodrigues\",\r\n    \"email\": \"alisson@cliente.teste.com\",\r\n    \"password\": \"teste123\",\r\n    \"ativo_programa_fidelidade\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/register",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "register"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Registrar cliente",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"name\": \"Alisson de S. Rodrigues\",\r\n    \"email\": \"alisson@cliente.teste.com\",\r\n    \"password\": \"teste123\",\r\n    \"ativo_programa_fidelidade\": true\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/register",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "register"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"name\": \"Alisson de S. Rodrigues\",\r\n    \"email\": \"alisson@cliente.teste.com\",\r\n    \"password\": \"teste123\",\r\n    \"ativo_programa_fidelidade\": true\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "Realizar login cliente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                      "\r",
+                      "pm.execution.setNextRequest(\"Obter cardápio por ID da unidade\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"alisson@cliente.teste.com\",\r\n  \"password\": \"teste123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/login",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Realizar login cliente",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"alisson@cliente.teste.com\",\r\n  \"password\": \"teste123\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n  \"email\": \"alisson@cliente.teste.com\",\r\n  \"password\": \"teste123\"\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "Obter cardápio por ID da unidade",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"PRODUCT_ID\", jsonData[0].id);\r",
+                      "\r",
+                      "pm.execution.setNextRequest(\"Realizar login atendente\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/cardapio/{{UNIDADE_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "cardapio",
+                    "{{UNIDADE_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Realizar login atendente",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                      "\r",
+                      "pm.execution.setNextRequest(\"Criar um novo pedido\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"atendimento@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/login",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Realizar login atendente",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"alisson@cliente.teste.com\",\r\n  \"password\": \"teste123\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n  \"email\": \"alisson@cliente.teste.com\",\r\n  \"password\": \"teste123\"\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "Criar um novo pedido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"ORDER_ID\", jsonData.order_id);\r",
+                      "\r",
+                      "pm.execution.setNextRequest(\"Retornar pedido por ID - status cozinha\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"{{PRODUCT_ID}}\",\r\n            \"quantidade\": 1\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"balcão\",\r\n    \"forma_pagamento\": \"dinheiro\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Criar um novo pedido",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"{{PRODUCT_ID}}\",\r\n            \"quantidade\": 1\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"balcão\",\r\n    \"forma_pagamento\": \"dinheiro\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n    \"unidade_id\": \"{{UNIDADE_ID}}\",\r\n    \"items\": [\r\n        {\r\n            \"produto_id\": \"{{PRODUCT_ID}}\",\r\n            \"quantidade\": 1\r\n        }\r\n    ],\r\n    \"canal_pedido\": \"balcão\",\r\n    \"forma_pagamento\": \"dinheiro\"\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "Retornar pedido por ID - status cozinha",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/status/{{ORDER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "status",
+                    "{{ORDER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Realizar login cozinha",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                      "\r",
+                      "pm.execution.setNextRequest(\"Alterar status de um pedido para pronto\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"cozinha@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/login",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Realizar login cozinha",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"atendimento@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\n    \"email\": \"cozinha@restaurante.com\",\n    \"password\": \"teste\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Alterar status de um pedido para pronto",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.execution.setNextRequest(\"Retornar pedido por ID - status pronto\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": \"pronto\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/{{ORDER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "{{ORDER_ID}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Alterar status de um pedido",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"status\": \"pronto\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos/{{ORDER_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        "{{ORDER_ID}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\n    \"status\": \"pronto\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Retornar pedido por ID - status pronto",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "pm.execution.setNextRequest(\"Realizar login atendente 2\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/status/{{ORDER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "status",
+                    "{{ORDER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Realizar login atendente 2",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let jsonData = pm.response.json();\r",
+                      "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                      "\r",
+                      "pm.execution.setNextRequest(\"Realizar pagamento de um pedido\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"atendimento@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/login",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "login"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Realizar login atendente 2",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"atendimento@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\n    \"email\": \"atendimento@restaurante.com\",\n    \"password\": \"teste\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Realizar pagamento de um pedido",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.execution.setNextRequest(\"Obter log de pagamentos da unidade\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"order_id\": \"{{ORDER_ID}}\",\r\n    \"cliente_email\": \"alisson@cliente.teste.com\",\r\n    \"cupom_codigo\": \"CUPOM10\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pagamentos",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pagamentos"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Realizar pagamento de um pedido",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"order_id\": \"{{ORDER_ID}}\",\r\n    \"cliente_email\": \"cliente@email.com\",\r\n    \"cupom_codigo\": \"CUPOM10\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pagamentos",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pagamentos"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\r\n    \"order_id\": \"{{ORDER_ID}}\",\r\n    \"cliente_email\": \"alisson@cliente.teste.com\",\r\n    \"cupom_codigo\": \"CUPOM10\"\r\n}"
+                }
+              ]
+            },
+            {
+              "name": "Obter log de pagamentos da unidade",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.execution.setNextRequest(\"Alterar status de um pedido para entregue\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pagamentos/log/{{UNIDADE_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pagamentos",
+                    "log",
+                    "{{UNIDADE_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Alterar status de um pedido para entregue",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.execution.setNextRequest(\"Retornar pedido por ID - status entregue\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": \"entregue\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/{{ORDER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "{{ORDER_ID}}"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Alterar status de um pedido para entregue",
+                  "originalRequest": {
+                    "method": "PATCH",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"status\": \"entregue\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/pedidos/{{ORDER_ID}}",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "pedidos",
+                        "{{ORDER_ID}}"
+                      ]
+                    }
+                  },
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json",
+                      "description": "",
+                      "type": "text"
+                    }
+                  ],
+                  "cookie": [
+                    {
+                      "expires": "Invalid Date",
+                      "domain": "",
+                      "path": ""
+                    }
+                  ],
+                  "body": "{\n    \"status\": \"entregue\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Retornar pedido por ID - status entregue",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "\r",
+                      "pm.execution.setNextRequest(\"Realizar login atendente 2\");"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{MEU_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/pedidos/status/{{ORDER_ID}}",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "pedidos",
+                    "status",
+                    "{{ORDER_ID}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
