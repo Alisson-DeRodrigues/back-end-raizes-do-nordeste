@@ -452,14 +452,14 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{BASE_URL}}/cardapio/recipe/cccccccc-0000-0000-0000-000000000002",
+                  "raw": "{{BASE_URL}}/cardapio/recipe/cccccccc-0000-0000-0000-000000000001",
                   "host": [
                     "{{BASE_URL}}"
                   ],
                   "path": [
                     "cardapio",
                     "recipe",
-                    "cccccccc-0000-0000-0000-000000000002"
+                    "cccccccc-0000-0000-0000-000000000001"
                   ]
                 }
               },
@@ -2326,6 +2326,49 @@
               "name": "Exibir log de pagamentos",
               "item": [
                 {
+                  "name": "Realizar login",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "let jsonData = pm.response.json();\r",
+                          "pm.environment.set(\"MEU_TOKEN\", jsonData.token);\r",
+                          "\r",
+                          "pm.execution.setNextRequest(\"Obter log de pagamentos da unidade\");\r",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n  \"email\": \"admin@restaurante.com\",\r\n  \"password\": \"teste\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{BASE_URL}}/login",
+                      "host": [
+                        "{{BASE_URL}}"
+                      ],
+                      "path": [
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
                   "name": "Obter log de pagamentos da unidade",
                   "protocolProfileBehavior": {
                     "disableBodyPruning": true
@@ -3342,7 +3385,7 @@
                   "script": {
                     "exec": [
                       "\r",
-                      "pm.execution.setNextRequest(\"Realizar login atendente 2\");"
+                      ""
                     ],
                     "type": "text/javascript",
                     "packages": {},
