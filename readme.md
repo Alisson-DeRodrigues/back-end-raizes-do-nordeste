@@ -127,3 +127,6 @@ Altere o valor da variável ambiente BASE_URL para o seu link externo.
 
 ### Executando testes no Postman
 Os testes estão organizados em pastas de forma que um teste não precisa de uma ação anterior para executar. Passe o mouse sobre o teste, clique nos três pontinhos e selecione run para executar o teste.
+
+![Exemplo teste no Postman](https://github.com/Alisson-DeRodrigues/back-end-raizes-do-nordeste/blob/main/src/docs/Exemplo%20de%20teste.png)
+![alt text](src/docs/Exemplo de teste.png)
