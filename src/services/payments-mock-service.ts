@@ -46,7 +46,6 @@ export async function processPaymentService(order_id: string, cliente_email: str
             }
         }
         
-        //let valor_desconto = cupom_codigo ? await PaymentService.useCouponService2(order.body.unidade_id, order.body.id, user.rows[0].id, cupom_codigo) : 0;
 
         let useCouponResponse = cupom_codigo 
     ? await PaymentService.useCouponService(order.body.unidade_id, order.body.id, user.rows[0].id, cupom_codigo) 

@@ -41,10 +41,10 @@ router.get("/cardapio/recipe/:id", authMiddleware, roleMiddleware(["admin"]), Me
 
 router.get("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha"]), OrderController.getAllOrders);
 router.get("/pedidos/status/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha", "cliente"]), OrderController.getOrderById);
-router.get("/pedidos/itens/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.getOrderItems);
+router.get("/pedidos/itens/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha"]), OrderController.getOrderItems);
 router.post("/pedidos", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha"]), OrderController.createOrder);
-router.patch("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cozinha"]), OrderController.updateOrderStatus);
-router.patch("/pedidos/cancelar/:id", authMiddleware, roleMiddleware(["admin", "atendente", "cliente"]), OrderController.cancelOrder);
+router.patch("/pedidos/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cozinha"]), OrderController.updateOrderStatus);
+router.patch("/pedidos/cancelar/:id", authMiddleware, roleMiddleware(["admin", "gerente", "atendente", "cliente"]), OrderController.cancelOrder);
 
 
 router.post("/pagamentos", authMiddleware, roleMiddleware(["admin", "gerente", "atendente"]), PaymentMockController.processPaymentMock);

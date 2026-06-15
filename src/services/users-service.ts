@@ -216,8 +216,6 @@ export const updateClientPoints = async (usuario_id: string, pontos: number) => 
     return await UserRepository.updateClientPoints(usuario_id, pontos);
 }
 
-// registrar transações de pontos de cleinte
-
 export const registerClientPointTransactionService = async (transacao: ClientPointTransaction) => {
     return await UserRepository.registerClientPointTransaction(transacao);
 }

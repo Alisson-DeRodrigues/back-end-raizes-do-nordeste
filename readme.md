@@ -48,6 +48,7 @@ Depois execute os comandos sql de [Tabelas](https://github.com/Alisson-DeRodrigu
 ---
 
 ### 5. Configurar .env
+O servidor está configurado no package.json para ler as variáveis ambiente no arquivo **prod.env**. Renomeie .env.exemple para prod.env ou crie o arquivo prod.env.
 ```
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/raizesdonordeste"
 PORT=3000
@@ -97,11 +98,11 @@ Acesse a rota /api-docs para acessar a documentação do Swagger.
 ## Coleção de testes com Postman
 ### Requisitos
 Arquivo Collection com as rotas/testes
-- [Link Github](https://github.com/Alisson-DeRodrigues/back-end-raizes-do-nordeste/blob/main/src/docs/Postman/API%20-%20Ra%C3%ADzes%20do%20Nordeste.postman_collection.json)
+- [Link Github](https://github.com/Alisson-DeRodrigues/back-end-raizes-do-nordeste/blob/main/src/docs/postman/API%20-%20Ra%C3%ADzes%20do%20Nordeste.postman_collection.json)
 - [Link Oficial](https://alisson-5450299.postman.co/workspace/Alisson's-Workspace~b8b95af7-72bb-4818-82f4-9c4a9dc71c73/collection/46634291-a1bac9fb-33dc-443c-be73-12af41bf61d7?action=share&source=copy-link&creator=46634291)
 
 Arquivo Environment com as variáveis ambiente
-- [Link Github](https://github.com/Alisson-DeRodrigues/back-end-raizes-do-nordeste/blob/main/src/docs/Postman/API%20-%20Ra%C3%ADzes%20do%20Nordeste.postman_environment.json)
+- [Link Github](https://github.com/Alisson-DeRodrigues/back-end-raizes-do-nordeste/blob/main/src/docs/postman/API%20-%20Ra%C3%ADzes%20do%20Nordeste.postman_environment.json)
 - [Link Oficial](https://alisson-5450299.postman.co/workspace/Alisson's-Workspace~b8b95af7-72bb-4818-82f4-9c4a9dc71c73/environment/46634291-f84d981f-63be-4aa6-8de4-cf03498eb91d?action=share&source=copy-link&creator=46634291)
 
 ---
@@ -129,4 +130,5 @@ Altere o valor da variável ambiente BASE_URL para o seu link externo.
 Os testes estão organizados em pastas de forma que um teste não precisa de uma ação anterior para executar. Passe o mouse sobre o teste, clique nos três pontinhos e selecione run para executar o teste.
 
 ![Exemplo teste no Postman](https://github.com/Alisson-DeRodrigues/back-end-raizes-do-nordeste/blob/main/src/docs/Exemplo%20de%20teste.png)
-![alt text](src/docs/Exemplo de teste.png)
+
+O Postman pode apresentar problemas relacionados com a variável ambiente **MEU_TOKEN**. Apague a variável para corrir o problema, ela será criada novamente no próximo login.

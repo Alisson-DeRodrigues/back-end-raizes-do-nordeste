@@ -1,8 +1,0 @@
-POST http://localhost:3000/pagamento
-Content-Type: application/json
-
-{
-    "order_id": "0e5c1f33-9f95-4346-aa11-13218a587250",
-    "cliente_email": "cliente@email.com",
-    "cupom_codigo": "CUPOM10"
-}

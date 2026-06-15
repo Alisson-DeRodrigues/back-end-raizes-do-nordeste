@@ -1,6 +1,0 @@
-PUT http://localhost:3000/pedido/d8be425c-da47-4fe9-9ddd-2159bdc60225
-Content-Type: application/json
-
-{
-    "status": "pronto"
-}

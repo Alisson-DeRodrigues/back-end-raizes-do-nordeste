@@ -1525,7 +1525,7 @@
                             "type": "string",
                             "format": "uuid"
                         },
-                        "description": "ID da receita"
+                        "description": "ID do produto"
                     }
                 ],
                 "responses": {

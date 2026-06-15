@@ -1,2 +1,0 @@
-GET  http://localhost:3000/financeiro
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc4NTg3ODQ0LCJleHAiOjE3Nzg1OTE0NDR9.-RRQD91dCrZom42Z8n_HyrCBCZ1KRASqmDvbEXDYfSM

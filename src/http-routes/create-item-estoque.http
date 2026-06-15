@@ -1,9 +1,0 @@
-POST http://localhost:3000/estoque/new
-Content-Type: application/json
-
-{
-    "unidade_id": "22222222-2222-2222-2222-222222222222",
-    "nome": "Cogumelo",
-    "unidade_de_medida": "kg",
-    "estoque_minimo": 5
-}
