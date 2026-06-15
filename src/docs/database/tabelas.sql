@@ -98,6 +98,7 @@ CREATE TABLE usuarios (
 CREATE TABLE pagamentos_pedidos (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     pedido_id UUID NOT NULL REFERENCES pedidos(id),
+    unidade_id UUID NOT NULL REFERENCES unidades(id),
 
     metodo_pagamento VARCHAR(30) NOT NULL, -- dinheiro, cartão, pix, mock
     valor NUMERIC(10,2) NOT NULL,
