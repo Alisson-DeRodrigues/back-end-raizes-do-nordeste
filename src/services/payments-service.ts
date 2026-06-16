@@ -62,7 +62,6 @@ export const useCouponService = async (unidade_id: string, order_id: string, usu
         const cupomResult = await findCouponByCodeAndUnitId(cupom_codigo, unidade_id);
         const order = await getOrderByIdService(order_id);
 
-        // 1. Validação: Cupom existe?
         if (cupomResult.rows.length === 0) {
             return {
                 status: 404,
@@ -76,7 +75,6 @@ export const useCouponService = async (unidade_id: string, order_id: string, usu
 
         const cupom = cupomResult.rows[0];
 
-        // 2. Validação: Valor mínimo do pedido
         if (cupom.valor_minimo_pedido > order.body.total) {
             return {
                 status: 400,
@@ -99,7 +97,6 @@ export const useCouponService = async (unidade_id: string, order_id: string, usu
             };
         }
 
-        // 3. Validação: Regras para Cupom PÚBLICO
         if (cupom.publico === true) {
             if (cupom.max_usos === cupom.usos) {
                 return {
@@ -114,10 +111,7 @@ export const useCouponService = async (unidade_id: string, order_id: string, usu
                 await incrementCouponUsage(cupom.id);
             }
 
-        } 
-        
-        // 4. Validação: Regras para Cupom PRIVADO
-        else {
+        } else {
             const cupom_usuario = await findAvailablePrivateCoupons(usuario_id, cupom.id);
 
             if (cupom_usuario.rows.length === 0) {
@@ -130,24 +124,20 @@ export const useCouponService = async (unidade_id: string, order_id: string, usu
                     )
                 };
             }
-            // Invalida o cupom privado do cliente para impedir reuso
+            
             await updateCouponStatusToUsed(cupom_usuario.rows[0].id);
         }
-
-        // 5. Cálculo unificado do desconto
         
         const valor_desconto = cupom.tipo === "porcentagem" 
             ? order.body.total * (cupom.valor / 100) 
             : cupom.valor;
  
-        // RETORNO PADRONIZADO: Agora sim o processPaymentService vai ler perfeitamente!
         return {
             status: 200,
             body: { desconto: valor_desconto }
         };
 
     } catch (error) {
-        console.error("Erro no useCouponService:", error);
         return {
             status: 500,
             body: createErrorMessage(
